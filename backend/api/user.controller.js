@@ -6,7 +6,7 @@ export default class UsersController {
 
       return res.status(200).json(userList);
     } catch (err) {
-      return res.status(401).json({ success: false, user: false, msg: err.message })
+      return res.status(401).json({ success: false, msg: err.message })
     }
   }
 

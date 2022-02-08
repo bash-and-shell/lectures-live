@@ -1,7 +1,8 @@
 import mongoose from 'mongoose';
+import isEmail from 'validator/lib/isEmail.js';
 
 const userSchema = new mongoose.Schema({
-    email: {type: String, required: true, unique: true},
+    email: {type: String, required: true, unique: true, validate: [isEmail, 'invalid email']},
     password: {type: String, required: true},
     type: {type: String, enum: ['student', 'teacher'], required: true},
   },
