@@ -1,103 +1,88 @@
-// exports.getUsers = (req, res, next) => {
-//   res.status(200).json({success: true, msg: "Show all users"});
-// }
-
-// exports.getUser = (req, res, next) => {
-//   res.status(200).json({success: true, msg: `Show user ${req.user.name}`});
-// }
-
-// exports.createUsers = (req, res, next) => {
-//   res.status(200).json({success: true, msg: "Create new users"});
-// }
-
-// exports.updateUser = (req, res, next) => {
-//   res.status(200).json({success: true, msg: `Update user ${req.user.name}`});
-// }
-
-// exports.deleteUser = (req, res, next) => {
-//   res.status(200).json({success: true, msg: `Delete user ${req.user.name}`});
-// }
- 
-import UserDAO from "../dao/usersDAO.js"
-
+import User from "../models/user.model.js"
 export default class UsersController {
-  static async getUsers (req, res, next) {
-    const userList = await UserDAO.getUsers()
-    res.status(200).json(userList)
+  static async getUsers(req, res, next) {
+    try {
+      const userList = await User.find()
+
+      return res.status(200).json(userList);
+    } catch (err) {
+      return res.status(401).json({ success: false, user: false, msg: err.message })
+    }
   }
 
   static async getUser(req, res, next) {
-    let filters = {}
+    try {
+      const user = await User.findOne({
+        email: req.body.email,
+        password: req.body.password,
+      })
 
-    if(req.params.user_id) {
-      filters.user_id = req.params.user_id
+      if (user) {
+        return res.status(200).json({ success: true, user: true })
+      }
+      else {
+        return res.status(401).json({ success: false, user: false })
+      }
+    } catch (err) {
+      return res.status(401).json({ success: false, user: false, msg: err.message })
     }
-    else if(req.query.email) {
-      filters.email = req.query.email
-    }
-
-    const userList = await UserDAO.getUser(filters)
-
-    let response = {
-      userList: userList,
-      filters: filters
-    }
-
-    res.status(200).json(response)
   }
 
-  static async createUser (req, res, next) {
+  static async createUser(req, res, next) {
     try {
-      console.log(req.body)
-      console.log(req.body.user_id)
-      const user_id = req.body.user_id
-      const email = req.body.email
-      const password = req.body.password
-      const type = req.body.type
-      
-      const response = await UserDAO.createUser(user_id, email, password, type)
-    
-      res.status(200).json({success: true})
+      const user = await User.create({
+        email: req.body.email,
+        password: req.body.password,
+        type: req.body.type,
+      })
+
+      console.log(`User created: ${user}`)
+      return res.json({ success: true })
     }
     catch (err) {
-      res.status(404).json({success:false, error: err, message: err.message})
+      //more error handling
+      return res.json({ success: false, msg: err.message })
     }
   }
 
-  static async updateUser (req, res, next) {
-
-    let userInfo = {}
-
-    if(req.params.user_id) {
-      userInfo.user_id = req.params.user_id
+  static async updateUser(req, res, next) {
+    try {
+      const user = await User.updateOne({
+        email: req.body.email,
+        password: req.body.password,
+      },
+        {
+          $set: {
+            email: req.body.new_email,
+            password: req.body.new_password,
+            type: req.body.new_type,
+          }
+        })
+      console.log(body.new_password)
+      console.log(`User updated: ${user}`)
+      return res.json({ success: true })
     }
-    if(req.body.email) {
-      userInfo.email = req.body.email
+    catch (err) {
+      //more error handling
+      return res.json({ success: false, msg: err.message })
     }
-    if(req.body.password) {
-      userInfo.password = req.body.password
-    }
-    if(req.body.type) {
-      userInfo.type = req.body.type
-    }
-
-    console.log(userInfo)
-
-    let response = await UserDAO.updateUser(userInfo)
-    
-    res.json(response)
   }
 
-  static async deleteUser (req, res, next) {
+  static async deleteUser(req, res, next) {
+    try {
+      const user = await User.deleteOne({
+        email: req.body.email,
+        password: req.body.password,
+      })
 
-    let userInfo = {}
-
-    if(req.params.user_id) {
-      userInfo.user_id = req.params.user_id
+      if (user) {
+        return res.status(200).json({ success: true, user: true })
+      }
+      else {
+        return res.status(401).json({ success: false, user: false })
+      }
+    } catch (err) {
+      return res.status(401).json({ success: false, user: false, msg: err.message })
     }
-    
-    let response = await UserDAO.deleteUser(userInfo)
-    
-    res.json(response)
   }
 }
