@@ -1,4 +1,5 @@
 import User from "../models/user.model.js"
+import jwt from 'jsonwebtoken';
 export default class UsersController {
   static async getUsers(req, res, next) {
     try {
@@ -18,7 +19,12 @@ export default class UsersController {
       })
 
       if (user) {
-        return res.status(200).json({ success: true, user: true })
+
+        const token = jwt.sign({
+          email: user.email,
+        }, process.env.JWT_SECRET)
+
+        return res.status(200).json({ success: true, user: token })
       }
       else {
         return res.status(401).json({ success: false, user: false })

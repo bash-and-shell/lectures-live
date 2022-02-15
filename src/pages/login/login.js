@@ -35,7 +35,13 @@ const Login = () => {
 
       const responseData = await response.json();
 
-      responseData.success ? setIsValidUser(true) : setIsValidUser(false);
+      if(responseData.success) {
+        setIsValidUser(true);
+        window.location.href = '/account'
+      } 
+      else {
+        setIsValidUser(false);
+      }
 
       console.log(responseData);
     
