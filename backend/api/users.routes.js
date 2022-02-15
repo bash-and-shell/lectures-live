@@ -9,7 +9,7 @@ router.route('/register')
 .post(UsersController.createUser)
 
 router.route('/user')
-.get(UsersController.getUser)
+.post(UsersController.getUser)
 .put(UsersController.updateUser)
 .delete(UsersController.deleteUser)
 
