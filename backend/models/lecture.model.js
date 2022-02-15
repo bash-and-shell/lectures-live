@@ -8,7 +8,7 @@ const responseSchema = new mongoose.Schema({
 })
 
 const lectureSchema = new mongoose.Schema({
-  user: { type: mongoose.SchemaTypes.Email, required: true },
+  user: {type: String, required: true, validate: [isEmail, 'invalid email']},
   title: { type: 'string', required: true },
   responses: { type: [responseSchema] }
 },
