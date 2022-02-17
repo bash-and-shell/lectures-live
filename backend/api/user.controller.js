@@ -19,9 +19,9 @@ export default class UsersController {
       })
 
       if (user) {
-
         const token = jwt.sign({
           email: user.email,
+          type: user.type,
         }, process.env.JWT_SECRET)
 
         return res.status(200).json({ success: true, user: token })

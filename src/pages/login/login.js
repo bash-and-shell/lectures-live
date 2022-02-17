@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import { useNavigate } from "react-router-dom";
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -15,12 +16,14 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 const theme = createTheme();
 
 const Login = () => {
+
+  const navigate = useNavigate();
  
   const [isValidUser, setIsValidUser] = useState(null);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
+    const formData = new FormData(event.currentTarget);
 
     const response = await fetch('http://localhost:5005/api/v1/users/user', {
       method: 'POST',
@@ -28,22 +31,23 @@ const Login = () => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        email: data.get('email'),
-        password: data.get('password'),
+        email: formData.get('email'),
+        password: formData.get('password'),
       }),
       })
 
-      const responseData = await response.json();
+      const data = await response.json();
 
-      if(responseData.success) {
+      if(data.success) {
         setIsValidUser(true);
-        window.location.href = '/account'
+        localStorage.setItem('token', data.user)
+        navigate('/account')
       } 
       else {
         setIsValidUser(false);
       }
 
-      console.log(responseData);
+      console.log(data);
     
   };
 
