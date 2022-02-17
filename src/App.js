@@ -4,16 +4,18 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Login from './pages/login/login'
 import Register from './pages/register/register'
 import ForgotPassword from './pages/ForgotPassword/ForgotPassword'
+import AccountPage from './pages/account/AccountPage'
 
 const App = () => {
   return  <React.Fragment>
     <Router>
       <Routes>
-        <Route path="/login" exact element={<Login />}/>
-        <Route path="/register" exact element={<Register />}/>
-        <Route path="/forgot-password" exact element={<ForgotPassword />}/>                            
+        <Route path="/login"  element={<Login />}/> 
+        <Route path="/register"  element={<Register />}/>
+        <Route path="/forgot-password"  element={<ForgotPassword />}/>  
+        <Route path="/account"  element={<AccountPage />}/>                                                      
       </Routes>
-    </Router>,
+    </Router>
   </React.Fragment>
 }
 
