@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import { useNavigate } from "react-router-dom";
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -22,6 +23,8 @@ const theme = createTheme();
 
 const SignUp = () => {
 
+  const navigate = useNavigate();
+
   const userTypes = ["Student", "Teacher"]
   const [value, setValue] = useState(userTypes[0])
   const [inputValue, setInputValue] = useState(userTypes[0])
@@ -36,11 +39,6 @@ const SignUp = () => {
     setStrongPassword(isStrongPassword(data.get('password')))
 
     if (emailValid && strongPassword) {
-      console.log({
-        email: data.get('email'),
-        password: data.get('password'),
-        type: value.toLowerCase()
-      });
       const response = await fetch('http://localhost:5005/api/v1/users/register', {
         method: 'POST',
         headers: { 
@@ -56,6 +54,8 @@ const SignUp = () => {
         const responseData = await response.json();
   
         console.log(responseData);
+
+        navigate('/login');
     }
   };
 
@@ -101,13 +101,6 @@ const SignUp = () => {
                   error={emailValid === false}
                   helperText={emailValid===false ? "Please enter a valid email address." : null}
                 />
-                {/* {emailValid === false &&
-                <Grid item xs={12}>
-                  <Typography variant="body1" color={red[500]}>
-                    Please enter a valid email address.
-                  </Typography>
-                </Grid>
-              } */}
               </Grid>
               <Grid item xs={12}>
                 <TextField
@@ -122,11 +115,6 @@ const SignUp = () => {
                   helperText={strongPassword === false ? passwordRequirementsText() : null}
                 />
               </Grid>
-              {/* {strongPassword === false &&
-                <Grid item xs={12}>
-                  
-                </Grid>
-              } */}
               <Grid item xs={12}>
                 <TextField
                   required
