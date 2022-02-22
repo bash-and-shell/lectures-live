@@ -50,12 +50,11 @@ export default class UsersController {
   static async createUser(req, res, next) {
     try {
       bcrypt.hash(req.body.password, 10).then(hash => {
-        const user = await User.create({
+        const user = User.create({
           email: req.body.email,
           password: hash,
           type: req.body.type,
         })
-  
       })
 
       console.log(`User created: ${user}`)
