@@ -1,6 +1,7 @@
-import React, {useState, useEffect} from 'react';
+import React, { useEffect, useState, useContext } from 'react';
+import { UserContext } from '../../context/UserContext'
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom'
-import { useJwt } from 'react-jwt';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -22,18 +23,17 @@ const theme = createTheme();
 
 const AccountPage = () => {
 
+  const token = localStorage.getItem('token')
+  const userContext = useContext(UserContext)
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem('token')
-    if (token) {
-      const {user, isExpired } = useJwt(token)
 
       if(!user && !isExpired) {
         localStorage.removeItem('token')
         navigate('/login')
       }
-    }
+    
   }, [])
 
   return (
