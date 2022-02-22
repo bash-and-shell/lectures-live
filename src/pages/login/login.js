@@ -1,4 +1,6 @@
-import React, {useState} from 'react';
+import React, { useEffect, useState, useContext } from 'react';
+import { UserContext } from '../../context/UserContext'
+import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -17,38 +19,27 @@ const theme = createTheme();
 
 const Login = () => {
 
+  const userContext = useContext(UserContext)
   const navigate = useNavigate();
- 
+
   const [isValidUser, setIsValidUser] = useState(null);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
-    const response = await fetch('http://localhost:5005/api/v1/users/user', {
-      method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        email: formData.get('email'),
-        password: formData.get('password'),
-      }),
-      })
-
-      const data = await response.json();
-
-      if(data.success) {
-        setIsValidUser(true);
-        localStorage.setItem('token', data.user)
+    axios.post('/users/user', JSON.stringify({
+      email: formData.get('email'),
+      password: formData.get('password'),
+    })).then((response) => {
+      if (response.data.success) {
+        userContext.login(response.data.userId, response.data.token);
         navigate('/account')
-      } 
-      else {
-        setIsValidUser(false);
       }
-
-      console.log(data);
-    
+    }).catch((err) => {
+      console.error(err);
+      setIsValidUser(false);
+    })
   };
 
   return (

@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -30,6 +31,7 @@ const SignUp = () => {
   const [inputValue, setInputValue] = useState(userTypes[0])
   const [emailValid, setEmailValid] = useState(null);
   const [strongPassword, setStrongPassword] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null)
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -39,23 +41,43 @@ const SignUp = () => {
     setStrongPassword(isStrongPassword(data.get('password')))
 
     if (emailValid && strongPassword) {
-      const response = await fetch('http://localhost:5005/api/v1/users/register', {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          email: data.get('email'),
-          password: data.get('password'),
-          type: value.toLowerCase()
-        }),
-        })
-  
-        const responseData = await response.json();
-  
-        console.log(responseData);
+      console.log("here");
 
-        navigate('/login');
+      axios.post('/users/register', JSON.stringify({
+        email: data.get('email'),
+        password: data.get('password'),
+        type: value.toLowerCase()
+      })).then((response) => {
+        if(response.success) {
+          userContext.login(response.data.userId, response.data.token);
+          navigate('/login')
+                  console.log(response);
+        }
+        else {
+          setErrorMessage(response.msg)
+        }
+      }).catch((err) => {
+        console.error(err);
+      })
+
+
+    //   const response = await fetch('http://localhost:5005/api/v1/users/register', {
+    //     method: 'POST',
+    //     headers: { 
+    //       'Content-Type': 'application/json'
+    //     },
+    //     body: JSON.stringify({
+    //       email: data.get('email'),
+    //       password: data.get('password'),
+    //       type: value.toLowerCase()
+    //     }),
+    //     })
+  
+    //     const responseData = await response.json();
+  
+    //     console.log(responseData);
+
+    //     navigate('/login');
     }
   };
 
