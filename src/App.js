@@ -2,11 +2,10 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import axios from 'axios';
 import { UserContext } from './context/UserContext'
-import CssBaseline from '@mui/material/CssBaseline';
-import Login from './pages/login/Login'
-import Register from './pages/register/Register'
-import ForgotPassword from './pages/ForgotPassword/ForgotPassword'
-import AccountPage from './pages/account/AccountPage'
+import Login from './pages/Login'
+import Register from './pages/Register'
+import ForgotPassword from './pages/ForgotPassword'
+import AccountPage from './pages/AccountPage'
 
 let timer
 
@@ -15,12 +14,10 @@ const App = () => {
   const [token, setToken] = useState(false);
   const [tokenExpiration, setTokenExpiration] = useState();
   const [userId, setUserId] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
 
-  const login = useCallback((id, token, expires) => {
+  const login = useCallback((id, userType, token, expires) => {
     setToken(token)
     setUserId(id)
-    setIsLoading(false)
     const tokenExpiration = expires || new Date(new Date().getTime() + 1000 * 60 * 60);
 
     setTokenExpiration(tokenExpiration)
@@ -29,6 +26,7 @@ const App = () => {
       'userData',
       JSON.stringify({
         userId: id,
+        type: userType,
         token: token,
         expiration: tokenExpiration.toISOString()
       })
@@ -61,7 +59,6 @@ const App = () => {
 
   useEffect(() => {
     const storedData = JSON.parse(localStorage.getItem('userData'));
-    setIsLoading(false)
     if (
       storedData &&
       storedData.token &&

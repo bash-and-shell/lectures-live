@@ -31,7 +31,7 @@ export default class UsersController {
       )
       console.log(user)
 
-      return res.status(200).json({ success: true, token: token, expiresIn: 3600, userId: user._id })
+      return res.status(200).json({ success: true, token: token, expiresIn: 3600, userId: user._id, type: user.type })
 
     } catch (err) {
       console.error(err)
