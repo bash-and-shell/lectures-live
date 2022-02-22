@@ -23,6 +23,7 @@ const ForgotPassword = () => {
     setEmailValid(isEmail(data.get('email')))
 
     if (emailValid) {
+      //TODO: create password form and then vaildate to update password
       const response = await fetch('http://localhost:5005/api/v1/users/user', {
         method: 'PUT',
         headers: { 
@@ -31,7 +32,6 @@ const ForgotPassword = () => {
         body: JSON.stringify({
           email: data.get('email'),
           password: data.get('password'),
-          type: value.toLowerCase()
         }),
       })
     }

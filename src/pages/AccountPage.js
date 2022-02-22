@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { UserContext } from '../../context/UserContext'
+import { UserContext } from '../context/UserContext'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'
 import Avatar from '@mui/material/Avatar';
@@ -16,31 +16,27 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Link as RouterLink } from 'react-router-dom';
-import PageHeader from '../../components/PageHeader'
+import PageHeader from '../components/PageHeader'
 
 
 const theme = createTheme();
 
 const AccountPage = () => {
-
   const token = localStorage.getItem('token')
   const userContext = useContext(UserContext)
   const navigate = useNavigate();
 
   useEffect(() => {
-
-      if(!user && !isExpired) {
-        localStorage.removeItem('token')
-        navigate('/login')
-      }
-    
+    if (!userContext.isLoggedIn) {
+      navigate('/login')
+    }
   }, [])
 
   return (
     <ThemeProvider theme={theme}>
       <PageHeader />
       <Container component="main" maxWidth="xs">
-      <Box
+        <Box
           sx={{
             marginTop: 8,
             display: 'flex',
@@ -48,9 +44,9 @@ const AccountPage = () => {
             alignItems: 'center',
           }}
         >
-          
+
         </Box>
-</Container>
+      </Container>
     </ThemeProvider>
   )
 }

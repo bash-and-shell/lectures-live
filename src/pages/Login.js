@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { UserContext } from '../../context/UserContext'
+import { UserContext } from '../context/UserContext'
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import Avatar from '@mui/material/Avatar';
@@ -33,7 +33,7 @@ const Login = () => {
       password: formData.get('password'),
     })).then((response) => {
       if (response.data.success) {
-        userContext.login(response.data.userId, response.data.token);
+        userContext.login(response.data.userId, response.data.type, response.data.token);
         navigate('/account')
       }
     }).catch((err) => {
@@ -102,7 +102,7 @@ const Login = () => {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link onClick={() => navigate('/register')} variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>

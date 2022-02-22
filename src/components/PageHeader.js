@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
+import { UserContext } from '../context/UserContext'
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -14,6 +15,8 @@ import Menu from '@mui/material/Menu';
 
 const PageHeader = () => {
 
+  const userContext = useContext(UserContext)
+
   const [menuVisible, setMenuVisible] = useState(null);
 
   const handleMenuVisible = (evt) => {
@@ -23,6 +26,12 @@ const PageHeader = () => {
   const handleClose = (evt) => {
     setMenuVisible(null)
   }
+
+  useEffect(() => {
+    if (!userContext.isLoggedIn) {
+
+    }
+  }, [])
 
   return (
     <Box sx={{flexGrow: 1}}>
