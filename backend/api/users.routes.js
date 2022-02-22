@@ -1,4 +1,5 @@
 import express from 'express';
+import checkAuth from '../middleware/checkAuth.js'
 import UsersController from './user.controller.js';
 const router = express.Router();
 
@@ -10,7 +11,7 @@ router.route('/register')
 
 router.route('/user')
 .post(UsersController.getUser)
-.put(UsersController.updateUser)
-.delete(UsersController.deleteUser)
+.put(checkAuth, UsersController.updateUser)
+.delete(checkAuth, UsersController.deleteUser)
 
 export default router;
