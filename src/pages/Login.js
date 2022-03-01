@@ -33,7 +33,7 @@ const Login = () => {
       password: formData.get('password'),
     })).then((response) => {
       if (response.data.success) {
-        userContext.login(response.data.userId, response.data.type, response.data.token);
+        userContext.login(response.data.userId, response.username, response.data.type, response.data.token);
         navigate('/account')
       }
     }).catch((err) => {

@@ -13,6 +13,7 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import Alert from '@mui/material/Alert';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Link as RouterLink } from 'react-router-dom';
 import PageHeader from '../components/PageHeader'
@@ -29,9 +30,10 @@ const SignUp = () => {
   const userTypes = ["Student", "Teacher"]
   const [value, setValue] = useState(userTypes[0])
   const [inputValue, setInputValue] = useState(userTypes[0])
-  const [emailValid, setEmailValid] = useState(null);
-  const [strongPassword, setStrongPassword] = useState(null);
-  const [errorMessage, setErrorMessage] = useState(null)
+  const [emailValid, setEmailValid] = useState(null)
+  const [strongPassword, setStrongPassword] = useState(null)
+  const [errorMessage, setErrorMessage] = useState('')
+  const [usernameValid, setUsernameValid] = useState(null)
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -45,6 +47,7 @@ const SignUp = () => {
 
       axios.post('/users/register', JSON.stringify({
         email: data.get('email'),
+        username: data.get('username'),
         password: data.get('password'),
         type: value.toLowerCase()
       })).then((response) => {
@@ -54,30 +57,14 @@ const SignUp = () => {
                   console.log(response);
         }
         else {
+          console.log(response.msg)
           setErrorMessage(response.msg)
         }
       }).catch((err) => {
+        setErrorMessage(err.response.data.msg)
+        console.log(err.response.data.msg)
         console.error(err);
       })
-
-
-    //   const response = await fetch('http://localhost:5005/api/v1/users/register', {
-    //     method: 'POST',
-    //     headers: { 
-    //       'Content-Type': 'application/json'
-    //     },
-    //     body: JSON.stringify({
-    //       email: data.get('email'),
-    //       password: data.get('password'),
-    //       type: value.toLowerCase()
-    //     }),
-    //     })
-  
-    //     const responseData = await response.json();
-  
-    //     console.log(responseData);
-
-    //     navigate('/login');
     }
   };
 
@@ -128,6 +115,18 @@ const SignUp = () => {
                 <TextField
                   required
                   fullWidth
+                  id="username"
+                  label="Username"
+                  name="username"
+                  autoComplete="username"
+                  error={usernameValid === false}
+                  helperText={usernameValid===false ? "This username already exists" : null}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
                   name="password"
                   label="Password"
                   type="password"
@@ -165,6 +164,10 @@ const SignUp = () => {
                   renderInput={(params)=><TextField {...params} label="I am a..."/>}
                 />
               </Grid>
+              {errorMessage !== '' &&
+              <Grid item xs={12}>
+               <Alert severity="error">{errorMessage}</Alert>
+              </Grid>}
             </Grid>
             <Button
               type="submit"

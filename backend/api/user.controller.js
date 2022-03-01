@@ -31,7 +31,7 @@ export default class UsersController {
       )
       console.log(user)
 
-      return res.status(200).json({ success: true, token: token, expiresIn: 3600, userId: user._id, type: user.type })
+      return res.status(200).json({ success: true, token: token, expiresIn: 3600, userId: user._id, username: user.username, type: user.type })
 
     } catch (err) {
       console.error(err)
@@ -45,12 +45,19 @@ export default class UsersController {
 
       const userExist = await User.findOne({ email: req.body.email })
 
+      const usernameExists = await User.findOne({ username: req.body.username })
+
       if(userExist) {
-        return res.status(401).json({ success: false, msg: 'User already exists'})
+        return res.status(401).json({ success: false, msg: 'User with this email already exists'})
+      }
+
+      if(usernameExists) {
+        return res.status(401).json({ success: false, msg: 'Username already exists'})
       }
 
       const user = await User.create({
         email: req.body.email,
+        username: req.body.username,
         password: hash,
         type: req.body.type,
       })

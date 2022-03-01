@@ -15,7 +15,7 @@ const App = () => {
   const [tokenExpiration, setTokenExpiration] = useState();
   const [userId, setUserId] = useState(false);
 
-  const login = useCallback((id, userType, token, expires) => {
+  const login = useCallback((id, username, userType, token, expires) => {
     setToken(token)
     setUserId(id)
     const tokenExpiration = expires || new Date(new Date().getTime() + 1000 * 60 * 60);
@@ -26,6 +26,7 @@ const App = () => {
       'userData',
       JSON.stringify({
         userId: id,
+        username: username,
         type: userType,
         token: token,
         expiration: tokenExpiration.toISOString()
