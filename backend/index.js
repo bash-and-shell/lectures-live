@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 dotenv.config();
 
 const port = process.env.PORT || 5001;
+let server;
 
 mongoose.connect(
   process.env.LL_DB_URI, 
