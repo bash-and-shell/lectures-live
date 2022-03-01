@@ -2,6 +2,7 @@
   "name": "lectures_live",
   "version": "0.1.0",
   "private": true,
+  "proxy" : "http://localhost:5005",
   "dependencies": {
     "@babel/runtime": "^7.17.2",
     "@emotion/react": "^11.7.1",

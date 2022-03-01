@@ -11,12 +11,10 @@ let timer
 
 const App = () => {
 
-  const [token, setToken] = useState(false);
   const [tokenExpiration, setTokenExpiration] = useState();
   const [userId, setUserId] = useState(false);
 
-  const login = useCallback((id, username, userType, token, expires) => {
-    setToken(token)
+  const login = useCallback((id, username, userType, expires) => {
     setUserId(id)
     const tokenExpiration = expires || new Date(new Date().getTime() + 1000 * 60 * 60);
 
@@ -28,12 +26,9 @@ const App = () => {
         userId: id,
         username: username,
         type: userType,
-        token: token,
         expiration: tokenExpiration.toISOString()
       })
     );
-
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
   }, []);
 
   const logout = useCallback(() => {
@@ -45,7 +40,6 @@ const App = () => {
     
     let token = null
     
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
   }, []);
 
   useEffect(() => {

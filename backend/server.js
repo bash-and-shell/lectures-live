@@ -2,6 +2,8 @@ import express from 'express';
 import { Server } from 'socket.io'
 import {createServer} from 'http';
 import cors from 'cors';
+import jwt from 'express-jwt';
+import cookieParser from 'cookie-parser';
 import headers from './middleware/headers.js'
 import users from './api/users.routes.js';
 import lectures from './api/lectures.routes.js';
@@ -12,6 +14,14 @@ const io = new Server(server);
 
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
+
+//checks for JWT auth
+app.use(jwt({
+  secret: process.env.JWT_SECRET, 
+  algorithms: ['HS256'],
+  getToken: req => req.cookies.token
+}).unless({ path: ['/api/v1/users/register'] }),);
 app.use(headers);
 
 app.use("/api/v1/users", users);

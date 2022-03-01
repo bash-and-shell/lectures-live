@@ -4,14 +4,14 @@ import LecturesController from './lectures.controller.js';
 const router = express.Router();
 
 router.route('/')
-.get(checkAuth, LecturesController.getLectures)
+.get(LecturesController.getLectures)
 
 router.route('/createLecture')
-.post(checkAuth, LecturesController.createLecture)
+.post(LecturesController.createLecture)
 
 router.route('/lecture')
-.get(checkAuth, LecturesController.getLecture)
-.put(checkAuth, LecturesController.updateLecture)
-.delete(checkAuth, LecturesController.deleteLecture)
+.get(LecturesController.getLecture)
+.put(LecturesController.updateLecture)
+.delete(LecturesController.deleteLecture)
 
 export default router;

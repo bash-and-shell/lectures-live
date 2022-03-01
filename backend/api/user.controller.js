@@ -29,9 +29,12 @@ export default class UsersController {
         process.env.JWT_SECRET,
         { expiresIn: "1h" }
       )
+
+      res.cookie('token', token, {httpOnly: true})
+
       console.log(user)
 
-      return res.status(200).json({ success: true, token: token, expiresIn: 3600, userId: user._id, username: user.username, type: user.type })
+      return res.status(200).json({ success: true, token, expiresIn: 3600, userId: user._id, username: user.username, type: user.type })
 
     } catch (err) {
       console.error(err)

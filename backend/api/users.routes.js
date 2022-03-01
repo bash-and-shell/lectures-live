@@ -11,7 +11,7 @@ router.route('/register')
 
 router.route('/user')
 .post(UsersController.getUser)
-.put(checkAuth, UsersController.updateUser)
-.delete(checkAuth, UsersController.deleteUser)
+.put(UsersController.updateUser)
+.delete( UsersController.deleteUser)
 
 export default router;
