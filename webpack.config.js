@@ -6,7 +6,6 @@ module.exports = {
     output: { path: path.join(__dirname, "build"), filename: "index.bundle.js", publicPath: "/" },
     mode: process.env.NODE_ENV || "development",
     resolve: { modules: [path.resolve(__dirname, "src"), "node_modules"] },
-    devServer: { static: path.join(__dirname, "src") },
     module: {
         rules: [
             { 
@@ -30,7 +29,13 @@ module.exports = {
         }),
     ],
     devServer: {
-      historyApiFallback: true,
-      open: true
+      host: "localhost",
+      proxy: {
+          '/api' : {
+              target : "http://localhost:5005",
+              source: false
+          }
+      },
+      historyApiFallback: true
     },
 };
