@@ -60,7 +60,13 @@ export default class UsersController {
       console.log(currentUser)
     }
 
-    return res.status(200).json({ currentUser: currentUser })
+    const returnUser = { 
+      id: currentUser._id,
+      username: currentUser.username,
+      type: currentUser.type
+    }
+
+    return res.status(200).json({ currentUser: returnUser })
   }
 
   static async logoutUser(req, res, next) {
