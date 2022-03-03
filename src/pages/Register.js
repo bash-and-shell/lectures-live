@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import Avatar from '@mui/material/Avatar';
@@ -17,9 +17,9 @@ import Alert from '@mui/material/Alert';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Link as RouterLink } from 'react-router-dom';
 import PageHeader from '../components/PageHeader'
-import { red } from '@mui/material/colors'
 import isEmail from 'validator/lib/isEmail';
 import isStrongPassword from 'validator/lib/isStrongPassword';
+import useAuth from '../hooks/useAuth'
 
 const theme = createTheme();
 
@@ -34,6 +34,7 @@ const SignUp = () => {
   const [strongPassword, setStrongPassword] = useState(null)
   const [errorMessage, setErrorMessage] = useState('')
   const [usernameValid, setUsernameValid] = useState(null)
+  const { registerUser, error } = useAuth();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -45,38 +46,28 @@ const SignUp = () => {
     if (emailValid && strongPassword) {
       console.log("here");
 
-      axios.post('/users/register', JSON.stringify({
-        email: data.get('email'),
-        username: data.get('username'),
-        password: data.get('password'),
-        type: value.toLowerCase()
-      })).then((response) => {
-        if(response.success) {
-          userContext.login(response.data.userId, response.data.token);
-          navigate('/login')
-                  console.log(response);
-        }
-        else {
-          console.log(response.msg)
-          setErrorMessage(response.msg)
-        }
-      }).catch((err) => {
-        setErrorMessage(err.response.data.msg)
-        console.log(err.response.data.msg)
-        console.error(err);
-      })
-    }
-  };
+      await registerUser(
+        data.get('email'),
+        data.get('username'),
+        data.get('password'),
+        value.toLowerCase()
+      )
 
-  const passwordRequirementsText =  () => {
-  return <p>
+      if (error) {
+        setErrorMessage(error)
+      }
+    }
+  }
+
+  const passwordRequirementsText = () => {
+    return <p>
       Please enter a password with at least:
-    <li>8 characters</li>
-    <li>1 uppercase</li>
-    <li>1 lowercase</li>
-    <li>1 special character</li>
+      <li>8 characters</li>
+      <li>1 uppercase</li>
+      <li>1 lowercase</li>
+      <li>1 special character</li>
     </p>
-}
+  }
 
 
   return (
@@ -108,7 +99,7 @@ const SignUp = () => {
                   name="email"
                   autoComplete="email"
                   error={emailValid === false}
-                  helperText={emailValid===false ? "Please enter a valid email address." : null}
+                  helperText={emailValid === false ? "Please enter a valid email address." : null}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -120,7 +111,7 @@ const SignUp = () => {
                   name="username"
                   autoComplete="username"
                   error={usernameValid === false}
-                  helperText={usernameValid===false ? "This username already exists" : null}
+                  helperText={usernameValid === false ? "This username already exists" : null}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -161,13 +152,13 @@ const SignUp = () => {
                   onInputChange={(event, newInputValue) => {
                     setInputValue(newInputValue);
                   }}
-                  renderInput={(params)=><TextField {...params} label="I am a..."/>}
+                  renderInput={(params) => <TextField {...params} label="I am a..." />}
                 />
               </Grid>
-              {errorMessage !== '' &&
-              <Grid item xs={12}>
-               <Alert severity="error">{errorMessage}</Alert>
-              </Grid>}
+              {error &&
+                <Grid item xs={12}>
+                  <Alert severity="error">{error}</Alert>
+                </Grid>}
             </Grid>
             <Button
               type="submit"

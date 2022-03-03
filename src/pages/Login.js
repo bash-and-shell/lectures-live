@@ -1,6 +1,4 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { UserContext } from '../context/UserContext'
-import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -14,33 +12,32 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import useAuth from '../hooks/useAuth'
 
 const theme = createTheme();
 
 const Login = () => {
 
-  const userContext = useContext(UserContext)
   const navigate = useNavigate();
 
   const [isValidUser, setIsValidUser] = useState(null);
+  const { loginUser, error } = useAuth();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
-    axios.post('/users/user', JSON.stringify({
-      email: formData.get('email'),
-      password: formData.get('password'),
-    })).then((response) => {
-      if (response.data.success) {
-        userContext.login(response.data.userId, response.username, response.data.type, response.data.token);
-        navigate('/account')
-      }
-    }).catch((err) => {
-      console.error(err);
+      await loginUser(
+      formData.get('email'),
+      formData.get('password'),
+    )
+    
+    if(error) {
       setIsValidUser(false);
-    })
+    }
   };
+
+
 
   return (
     <ThemeProvider theme={theme}>
