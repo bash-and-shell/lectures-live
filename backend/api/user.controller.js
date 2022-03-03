@@ -12,6 +12,7 @@ export default class UsersController {
     }
   }
 
+  //login user
   static async getUser(req, res, next) {
     try {
       const user = await User.findOne({email: req.body.email})
@@ -25,22 +26,52 @@ export default class UsersController {
       }
 
       const token = jwt.sign(
-        { email: user.email, type: user.type },
-        process.env.JWT_SECRET,
-        { expiresIn: "1h" }
+        { id: user._id },
+        process.env.JWT_SECRET
       )
+      
+      //login cookie set for 10 days
+      let expires = new Date()
+      expires.setDate(expires.getDate() + 10)
+      
+      res.cookie('token', token, {
+        expires: expires,
+        httpOnly: true,
+        secure: req.secure || req.headers['x-forwarded-proto'] === 'https'
+      })
 
-      res.cookie('token', token, {httpOnly: true})
-
-      console.log(user)
-
-      return res.status(200).json({ success: true, token, expiresIn: 3600, userId: user._id, username: user.username, type: user.type })
+      res.status(200).json({ success: true, token, userId: user._id, username: user.username, type: user.type })
 
     } catch (err) {
       console.error(err)
       res.status(500).json({ success: false, msg: err.message })
     }
   }
+
+  static async checkUser(req, res, next) {
+    let currentUser = null;
+    
+    if (req.cookies.token) {
+      console.log("hi")
+      const token = req.cookies.token
+      const decoded = await jwt.verify(token, process.env.JWT_SECRET)
+      currentUser = await User.findById(decoded.id)
+
+      console.log(currentUser)
+    }
+
+    return res.status(200).json({ currentUser: currentUser })
+  }
+
+  static async logoutUser(req, res, next) {
+    res.cookie('jwt', 'logout', {
+      expires: new Date(Date.now() + 10 * 1000),
+      httpOnly: true
+    });
+
+    res.status(200).json({ success: true, msg: 'user is logged out'});
+  }
+
 
   static async createUser(req, res, next) {
     try {
@@ -49,7 +80,7 @@ export default class UsersController {
       const userExist = await User.findOne({ email: req.body.email })
 
       const usernameExists = await User.findOne({ username: req.body.username })
-
+      
       if(userExist) {
         return res.status(401).json({ success: false, msg: 'User with this email already exists'})
       }
@@ -65,12 +96,30 @@ export default class UsersController {
         type: req.body.type,
       })
 
+
       console.log(`User created: ${user}`)
-      return res.status(201).json({ success: true })
+
+      const token = jwt.sign(
+        { email: user.email, type: user.type },
+        process.env.JWT_SECRET
+      )
+      
+      //login cookie set for 10 days
+      let expires = new Date()
+      expires.setDate(expires.getDate() + 10)
+
+      res.cookie('token', token, {
+        expires: expires,
+        httpOnly: true,
+        secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
+        sameSite: 'none'
+      })
+
+      return res.status(201).json({ success: true, token, userId: user._id, username: user.username, type: user.type })
     }
     catch (err) {
       //more error handling
-      return res.json({ success: false, msg: err.message })
+      return res.status(400).json({ success: false, msg: err.message })
     }
   }
 
@@ -87,7 +136,6 @@ export default class UsersController {
             type: req.body.new_type,
           }
         })
-      console.log(body.new_password)
       console.log(`User updated: ${user}`)
       return res.json({ success: true })
     }
