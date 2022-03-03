@@ -26,12 +26,6 @@ const AccountPage = () => {
   const userContext = useContext(UserContext)
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!userContext.isLoggedIn) {
-      navigate('/login')
-    }
-  }, [])
-
   return (
     <ThemeProvider theme={theme}>
       <PageHeader />
