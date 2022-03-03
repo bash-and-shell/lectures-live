@@ -4,15 +4,8 @@ import './index.css';
 import App from './App';
 import axios from 'axios';
 
-axios.defaults.baseURL = 'http://localhost:5005/api/v1'
-
-let userData = JSON.parse(localStorage.getItem('userData'))
-let token
-
-if (userData)
-  token = userData.token
-
-axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+axios.defaults.baseURL = '/api/v1'
+axios.defaults.withCredentials = true
 axios.defaults.headers.post['Content-Type'] = 'application/json'
 
 axios.interceptors.request.use(request => {     
