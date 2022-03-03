@@ -9,6 +9,12 @@ router.route('/')
 router.route('/register')
 .post(UsersController.createUser)
 
+router.route('/checkUser')
+.get(UsersController.checkUser)
+
+router.route('/logout')
+.get(UsersController.logoutUser)
+
 router.route('/user')
 .post(UsersController.getUser)
 .put(UsersController.updateUser)
