@@ -1,7 +1,3 @@
-import '@fontsource/roboto/300.css';
-import '@fontsource/roboto/400.css';
-import '@fontsource/roboto/500.css';
-import '@fontsource/roboto/700.css';
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import UserRoute from './components/UserRoute'
@@ -11,6 +7,7 @@ import Register from './pages/Register'
 import ForgotPassword from './pages/ForgotPassword'
 import AccountPage from './pages/AccountPage'
 import JoinSession from './pages/student/JoinSession'
+import Session from './pages/student/Session'
 import CreateSession from './pages/teacher/CreateSession'
 import useCheckUser from './hooks/useCheckUser'
 
@@ -27,9 +24,11 @@ const App = () => {
         <Route path="/account" element={<AccountPage />} />
         <Route path="/join" element={<JoinSession />} />
         <Route path="/create" element={<CreateSession />} />
+        <Route path="/session" element={<Session />} />
         {/* <Route path='/account/:username' element={<UserRoute><AccountPage/></UserRoute>} /> */}
         {/* <Route path="/join" element={<UserRoute><JoinSession/></UserRoute>} /> */}
         {/* <Route path="/create" element={<UserRoute><CreateSession/></UserRoute>} /> */}
+        {/* <Route path="/session/:session-id" element={<UserRoute><Session/></UserRoute>} /> */}
       </Routes>
     </Router>
   </React.Fragment>
