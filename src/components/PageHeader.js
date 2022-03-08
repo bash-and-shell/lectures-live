@@ -27,11 +27,7 @@ const PageHeader = () => {
     setMenuVisible(null)
   }
 
-  useEffect(() => {
-    if (!userContext.isLoggedIn) {
 
-    }
-  }, [])
 
   return (
     <Box sx={{flexGrow: 1}}>
