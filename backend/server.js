@@ -12,7 +12,12 @@ import lectures from './api/lectures.routes.js';
 dotenv.config();
 const app = express();
 const server = createServer(app)
-const io = new Server(server);
+const io = new Server(server, {
+  cors: {
+    origin: true,
+    credentials: true
+  }
+});
 
 const corsOptions = {
   credentials: true,
@@ -34,16 +39,18 @@ app.use("*", (req, res, next) => res.status(404).json({ error: 'Route not found'
 io.on('connection', socket => {
 
   //on connection take params of room number/code and then join room of that code
-  socket.on('joinRoom', ({room, userType}) => {
-    socket.join(`${room}-${userType}`)
+  socket.on('joinRoom', (room, user) => {
+    socket.join(`${room}-${user.type}`)
+    console.log(`User ${user.username} joined room ${room}`)
   })
 
-  socket.on('leaveRoom', ({room, userType}) => {
-    socket.leave(`${room}-${userType}`)
+  socket.on('leaveRoom', (room, user) => {
+    socket.leave(`${room}-${user.type}`)
+    console.log(`User ${user.username} left room ${room}`)
   })
 
   //if submit response
-  socket.on('submitresponse', (response, room) => {
+  socket.on('submitResponse', (response, room) => {
     socket.to(`${room}-teacher`).emit(response)
   })
 

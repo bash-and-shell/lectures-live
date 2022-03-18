@@ -34,7 +34,11 @@ module.exports = {
           '/api' : {
               target : "http://localhost:5005",
               source: false
-          }
+          },
+          '/socket.io' : {
+            target : "http://localhost:5005",
+            ws: true
+        }
       },
       historyApiFallback: true
     },
