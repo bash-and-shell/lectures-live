@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Routes, useParams } from 'react-router-dom'
 import UserRoute from './components/UserRoute'
 import { UserContext } from './context/UserContext'
 import { SocketContext, socket } from './context/SocketContext'
@@ -22,14 +22,14 @@ const App = () => {
         <React.Fragment>
           <Router>
             <Routes>
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/forgot-password" element={<ForgotPassword />} />
-              <Route path="/account" element={<AccountPage />} />
-              <Route path="/join" element={<JoinSession />} />
-              <Route path="/create" element={<CreateSession />} />
-              <Route path="/session" element={<Session />} />
-              <Route path="/session-data" element={<SessionData />} />
+              <Route path="login" element={<Login />} />
+              <Route path="register" element={<Register />} />
+              <Route path="forgot-password" element={<ForgotPassword />} />
+              <Route path="account" element={<AccountPage />} />
+              <Route path="join" element={<JoinSession />} />
+              <Route path="create" element={<CreateSession />} />
+              <Route path="session" element={<Session />} />
+              <Route path="session-data/:session" element={<SessionData />} />
               {/* <Route path='/account/:username' element={<UserRoute><AccountPage/></UserRoute>} /> */}
               {/* <Route path="/join" element={<UserRoute><JoinSession/></UserRoute>} /> */}
               {/* <Route path="/create" element={<UserRoute><CreateSession/></UserRoute>} /> */}
