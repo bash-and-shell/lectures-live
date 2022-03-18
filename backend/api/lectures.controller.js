@@ -14,7 +14,7 @@ export default class LecturesController {
   static async getUserLectures(req, res, next) {
     try {
       const lectureList = await Lecture.find({
-        user: req.body.user
+        user_id: req.body.user_id
       })
 
       return res.status(200).json(lectureList);
@@ -25,10 +25,19 @@ export default class LecturesController {
 
   static async getLecture(req, res, next) {
     try {
-      const lecture = await Lecture.findOne({
-        user: req.body.user,
-        title: req.body.title,
-      })
+      let lecture
+      if(req.body.id) {
+        lecture = await Lecture.findOne({
+          id: req.body.id,
+        })
+      }
+      else {
+        lecture = await Lecture.findOne({
+          user_id: req.body.user_id,
+          title: req.body.title,
+        })
+      }
+       
 
       if (lecture) {
         return res.status(200).json({ success: true, lecture: true })
@@ -44,7 +53,7 @@ export default class LecturesController {
   static async createLecture(req, res, next) {
     try {
       const lecture = await Lecture.create({
-        user: req.body.user,
+        user_id: req.body.user,
         title: req.body.title,
         responses: req.body.responses,
       })
@@ -60,7 +69,7 @@ export default class LecturesController {
   static async updateLecture(req, res, next) {
     try {
       const lecture = await Lecture.updateOne({
-        user: req.body.user,
+        user_id: req.body.user_id,
         title: req.body.title,
       },
         {
@@ -80,7 +89,7 @@ export default class LecturesController {
   static async deleteLecture(req, res, next) {
     try {
       const lecture = await Lecture.deleteOne({
-        user: req.body.user,
+        user_id: req.body.user_id,
         title: req.body.title,
       })
 
