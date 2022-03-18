@@ -34,21 +34,19 @@ app.use("*", (req, res, next) => res.status(404).json({ error: 'Route not found'
 io.on('connection', socket => {
 
   //on connection take params of room number/code and then join room of that code
-
-  socket.on('room', room => {
-    socket.join(room)
+  socket.on('joinRoom', ({room, userType}) => {
+    socket.join(`${room}-${userType}`)
   })
 
-
-  //if submit emoticon
-  socket.on('submitreaction', reaction => {
-
+  socket.on('leaveRoom', ({room, userType}) => {
+    socket.leave(`${room}-${userType}`)
   })
 
-  //if submit question
-  socket.on('submitquesiton', question => {
-
+  //if submit response
+  socket.on('submitresponse', (response, room) => {
+    socket.to(`${room}-teacher`).emit(response)
   })
+
 
   //maybe allow lecturer to send question to students to answer??
 })
