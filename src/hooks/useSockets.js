@@ -1,32 +1,30 @@
-import { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { UserContext } from '../context/UserContext';
 import { io } from "socket.io-client";
 
-const useSockets = () => {
+const useSockets = (room) => {
   const socket = io()
   const navigate = useNavigate();
-  const {setUser}  = useContext(UserContext);
-  const [error, setError] = useState(null);
+  const {user}  = useContext(UserContext);
 
-  //create and join room
-  const enterRoom = async (room) => {
-    socket.emit("room", room);
+  useEffect(()=> {
+    //on mount of useSockets, join rom
+    if(user === null)
+      return
+    socket.emit("joinRoom", room, user)
+    //dismount, leave room
+    return () => {
+      socket.emit("leaveRoom", room, user)
+    }
+  }, [user])
+
+  const sendResponse = (reaction, room) => {
+    socket.emit('submitResponse', reaction, room)
   }
 
-  const endRoom = async () => {
-
-  }
-
-  const sendResponse = async () => {
-
-  }
-
-  return { 
-    enterRoom,
+  return {
     sendResponse,
-    endRoom
   }
 }
 
