@@ -4,20 +4,9 @@
 }
 
 .item {
-  height: 10rem;
+  box-sizing: border-box;
+  height: 100%;
   margin: auto;
   flex-grow: 1;
   padding: 1rem;
-
-  &--selected {
-    border-color: black;
-  }
-}
-
-.question-box {
-  box-sizing: border-box;
-  position: fixed;
-  bottom: 0rem;
-  width: 100%;
-  padding: 0.5rem;
 }
