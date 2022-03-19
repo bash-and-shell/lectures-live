@@ -1,10 +1,11 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
-import { io } from "socket.io-client";
+import { SocketContext } from '../context/SocketContext';
+// import { io } from "socket.io-client";
 
 const useSockets = (room) => {
-  const socket = io()
+  const {socket} = useContext(SocketContext)
   const navigate = useNavigate();
   const {user}  = useContext(UserContext);
 
@@ -13,19 +14,20 @@ const useSockets = (room) => {
     if(user === null)
       return
     socket.emit("joinRoom", room, user)
+
+
+
     //dismount, leave room
     return () => {
       socket.emit("leaveRoom", room, user)
     }
   }, [user])
 
-  const sendResponse = (reaction, room) => {
-    socket.emit('submitResponse', reaction, room)
+  const sendResponse = (response) => {
+    socket.emit('sendResponse', response, room)
   }
 
-  return {
-    sendResponse,
-  }
+  return {sendResponse}
 }
 
 export default useSockets;
