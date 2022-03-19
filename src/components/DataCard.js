@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import { alpha, styled } from '@mui/material/styles'
 import { Card, Typography } from '@mui/material'
 import PropTypes from "prop-types";
@@ -11,18 +11,16 @@ const StyledCard = styled(Card)(({theme}) => {
 
 const DataCard = (props) => {
 
-  const { currentReactions, totalReactions, emotion, ...rest } = props
+  const { emotion, ...rest } = props
+  const [reactions, setReactions] = useState(props.reactions)
   const divRef = useRef(null)
   const cardRef = useRef(null)
   const textRef = useRef(null)
 
 
   useEffect(() => {
-    divRef.current.style.height = `${parseInt(currentReactions*100/totalReactions)}%`
-  }, [currentReactions, totalReactions])
-  
-  useEffect(() => {
     textRef.current.style.height = `${cardRef.current.offsetHeight}px`
+    divRef.current.style.height = `${parseInt(reactions[emotion]*100/reactions['total'])}%`
   })
 
   const getEmotion = () => {
@@ -33,7 +31,7 @@ const DataCard = (props) => {
         return ['😁', 'Understand']
       case 'bored':
         return ['😴', 'Bored']
-      case 'mind':
+      case 'mind blown':
         return ['🤯', 'Mind Blown']
     }
   }
@@ -51,9 +49,8 @@ const DataCard = (props) => {
 }
 
 DataCard.propTypes = {
-  totalReactions : PropTypes.number.isRequired,
-  currentReactions : PropTypes.number.isRequired,
-  emotion: PropTypes.oneOf(['confused', 'understand', 'bored', 'mind' ]).isRequired
+  reactions: PropTypes.object.isRequired,
+  emotion: PropTypes.oneOf(['confused', 'understand', 'bored', 'mind blown' ]).isRequired
 }
 
 export default DataCard
