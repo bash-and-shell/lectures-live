@@ -15,13 +15,13 @@ const server = createServer(app)
 const io = new Server(server, {
   cors: {
     origin: true,
-    credentials: true
+    withCredentials: true
   }
 });
 
 const corsOptions = {
-  credentials: true,
-  origin: true
+  withCredentials: true,
+  origin: 'http://localhost:5005'
 };
 
 app.use(cors(corsOptions));
@@ -40,18 +40,19 @@ io.on('connection', socket => {
 
   //on connection take params of room number/code and then join room of that code
   socket.on('joinRoom', (room, user) => {
-    socket.join(`${room}-${user.type}`)
+    socket.join(`${room}`)
     console.log(`User ${user.username} joined room ${room}`)
   })
 
   socket.on('leaveRoom', (room, user) => {
-    socket.leave(`${room}-${user.type}`)
+    socket.leave(`${room}`)
     console.log(`User ${user.username} left room ${room}`)
   })
 
   //if submit response
-  socket.on('submitResponse', (response, room) => {
-    socket.to(`${room}-teacher`).emit(response)
+  socket.on('sendResponse', (response, room) => {
+    socket.to(`${room}`).emit(('receiveResponse'), response)
+    console.log(response)
   })
 
 
