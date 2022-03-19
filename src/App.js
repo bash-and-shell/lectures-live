@@ -15,10 +15,9 @@ import useCheckUser from './hooks/useCheckUser'
 
 const App = () => {
   const { user, setUser } = useCheckUser();
-
   return (
     <UserContext.Provider value={{ user, setUser }}>
-      <SocketContext.Provider value={socket}>
+      <SocketContext.Provider value={{socket}}>
         <React.Fragment>
           <Router>
             <Routes>
@@ -28,7 +27,7 @@ const App = () => {
               <Route path="account" element={<AccountPage />} />
               <Route path="join" element={<JoinSession />} />
               <Route path="create" element={<CreateSession />} />
-              <Route path="session" element={<Session />} />
+              <Route path="session/:teacher/:room" element={<Session />} />
               <Route path="session-data/:session" element={<SessionData />} />
               {/* <Route path='/account/:username' element={<UserRoute><AccountPage/></UserRoute>} /> */}
               {/* <Route path="/join" element={<UserRoute><JoinSession/></UserRoute>} /> */}
