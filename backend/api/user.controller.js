@@ -1,6 +1,8 @@
 import User from "../models/user.model.js"
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+import mongoose from 'mongoose';
+
 export default class UsersController {
   static async getUsers(req, res, next) {
     try {
@@ -40,7 +42,7 @@ export default class UsersController {
         secure: req.secure || req.headers['x-forwarded-proto'] === 'https'
       })
 
-      res.status(200).json({ success: true, token, userId: user._id, username: user.username, type: user.type })
+      res.status(200).json({ success: true, token, userId: mongoose.Types.ObjectId(user._id), username: user.username, type: user.type })
 
     } catch (err) {
       console.error(err)
@@ -52,16 +54,17 @@ export default class UsersController {
     let currentUser = null;
     
     if (req.cookies.token) {
-      console.log("hi")
       const token = req.cookies.token
       const decoded = await jwt.verify(token, process.env.JWT_SECRET)
       currentUser = await User.findById(decoded.id)
-
       console.log(currentUser)
+    }
+    else {
+      return res.status(401)
     }
 
     const returnUser = { 
-      id: currentUser._id,
+      id: mongoose.Types.ObjectId(currentUser._id),
       username: currentUser.username,
       type: currentUser.type
     }
