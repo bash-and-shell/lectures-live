@@ -19,7 +19,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import PageHeader from '../components/PageHeader'
 import isEmail from 'validator/lib/isEmail';
 import isStrongPassword from 'validator/lib/isStrongPassword';
-import useAuth from '../hooks/useAuth'
+import { useAuth } from '../hooks'
 
 const theme = createTheme();
 

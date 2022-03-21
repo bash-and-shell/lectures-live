@@ -12,7 +12,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import useAuth from '../hooks/useAuth'
+import { useAuth } from '../hooks'
 
 const theme = createTheme();
 
@@ -27,12 +27,12 @@ const Login = () => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
-      await loginUser(
+    await loginUser(
       formData.get('email'),
       formData.get('password'),
     )
-    
-    if(error) {
+
+    if (error) {
       setIsValidUser(false);
     }
   };

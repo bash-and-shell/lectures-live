@@ -21,7 +21,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { deepPurple } from '@mui/material/colors';
 import { styled } from '@mui/material/styles'
 import SendIcon from '@mui/icons-material/Send';
-import useSockets from '../../hooks/useSockets'
+import { useSockets } from '../../hooks'
 
 
 const theme = createTheme({
@@ -45,7 +45,7 @@ const Session = () => {
 
   const handleSelection = (e, index) => {
     if (selectedIndex === index) {
-      return 
+      return
     }
     setSelectedIndex(index);
     const response = {
@@ -61,7 +61,7 @@ const Session = () => {
 
   const handleSubmitQuestion = (e) => {
     e.preventDefault();
-    
+
     const response = {
       user_id: user.id,
       username: user.username,
@@ -77,7 +77,7 @@ const Session = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Grid container spacing={0} sx={{ position: 'fixed', top: '0', bottom: '0', alignContent: 'flex-start'}}>
+      <Grid container spacing={0} sx={{ position: 'fixed', top: '0', bottom: '0', alignContent: 'flex-start' }}>
         <Grid container item backgroundColor="primary.main" sx={{ height: '30%', flexDirection: 'column-reverse' }}>
           <Typography variant="h4" component="div" id='heading'>
             How are you feeling in this lecture?
@@ -88,9 +88,9 @@ const Session = () => {
           <Avatar sx={{ bgcolor: deepPurple[500], height: 60, width: 60, alignSelf: 'center' }}></Avatar>
 
         </Grid>
-        <Grid container item  marginTop="1rem" sx={{ paddingBottom: '0.25rem' }}>
+        <Grid container item marginTop="1rem" sx={{ paddingBottom: '0.25rem' }}>
           <Container maxWidth="xs"  >
-            <Grid container item  spacing={2} >
+            <Grid container item spacing={2} >
               <Grid item xs={6}>
                 <Paper
                   elevation={selectedIndex === 0 ? 8 : 1}
