@@ -42,10 +42,10 @@ const SessionData = () => {
     'total': 0
   })
   const [questionList, setQuestionList] = useState([])
+  const [sessionData, setSessionData] = useState([])
   const { updateSession } = useSession();
 
   let landscape = true;
-  let sessionData = []
 
   const room = `${teacher}/${session}`
 
@@ -55,50 +55,6 @@ const SessionData = () => {
   // add socket listeners for receiving a response
   useEffect(() => {
     socket.on('receiveResponse', (response) => {
-      // handle feeling response
-      if (response.response_type === 'feeling') {
-        let total
-        let feelingChange
-        let updateResponse
-
-        //check to see if user has previously submitted response
-        if (sessionData.some((s) => {
-          if ((s.response_type === 'feeling' && s.user_id === response.user_id)) {
-            feelingChange = s.response
-            console.log(feelingChange)
-            return true
-          }
-          return false
-        })) {
-          //if they have, change totals to reflect this by removing old and replacing with new feeling
-          updateResponse = {
-            [response.response]: feelings[response.response]++,
-            [feelingChange]: feelings[feelingChange]--,
-            total: feelings.total
-          }
-        }
-        else {
-          //else add new feeling 
-          updateResponse = {
-            [response.response]: feelings[response.response]++,
-            total: feelings.total++
-          }
-        }
-
-        setFeelings(feelings => ({
-          ...feelings,
-          updateResponse
-        }))
-
-        //push to sessionData for posting to server
-        sessionData.unshift({
-          user_id: response.user_id,
-          response_type: response.response_type,
-          response: response.response,
-          time: response.time
-        })
-      }
-
       // handle question
       if (response.response_type === 'question') {
         setQuestionList((currentList) => {
@@ -108,17 +64,63 @@ const SessionData = () => {
           }])
         })
       }
-    })
 
+      setSessionData((currentList) => {
+        return ([{
+          user_id: response.user_id,
+          response_type: response.response_type,
+          response: response.response,
+          time: response.time
+        }, ...currentList])
+      })
+    })
   }, [])
 
+  //When session data updates update feelings
   useEffect(() => {
-    if (window.innerHeight > window.innerWidth) {
-      landscape = false
+    if(sessionData === [])
       return
+
+    let response = sessionData[0]
+    if(!response)
+      return
+
+    if (response.response_type === 'feeling') {
+      let total
+      let feelingChange
+      let updateResponse
+      //check to see if user has previously submitted response
+      if (sessionData.slice(1).some((s) => {
+        if ((s.response_type === 'feeling' && s.user_id === response.user_id)) {
+          feelingChange = s.response
+          console.log(feelingChange)
+          return true
+        }
+        return false
+      })) {
+        //if they have, change totals to reflect this by removing old and replacing with new feeling
+        updateResponse = {
+          [response.response]: feelings[response.response]++,
+          [feelingChange]: feelings[feelingChange]--,
+          total: feelings.total
+        }
+      }
+      else {
+        //else add new feeling 
+        updateResponse = {
+          [response.response]: feelings[response.response]++,
+          total: feelings.total++
+        }
+      }
+
+      setFeelings(feelings => ({
+        ...feelings,
+        updateResponse
+      }))
+
+      console.log(feelings)
     }
-    landscape = true
-  }, [window.innerWidth, window.innerHeight])
+  }, [sessionData])
 
   const handleResetFeelings = () => {
     setFeelings({
