@@ -6,12 +6,13 @@ import { SocketContext, socket } from './context/SocketContext'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import ForgotPassword from './pages/ForgotPassword'
-import AccountPage from './pages/AccountPage'
+import StudentAccountPage from './pages/student/StudentAccountPage'
+import TeacherAccountPage from './pages/teacher/TeacherAccountPage'
 import JoinSession from './pages/student/JoinSession'
 import Session from './pages/student/Session'
 import CreateSession from './pages/teacher/CreateSession'
 import SessionData from './pages/teacher/SessionData'
-import useCheckUser from './hooks/useCheckUser'
+import {useCheckUser} from './hooks'
 
 const App = () => {
   const { user, setUser } = useCheckUser();
@@ -24,11 +25,13 @@ const App = () => {
               <Route path="login" element={<Login />} />
               <Route path="register" element={<Register />} />
               <Route path="forgot-password" element={<ForgotPassword />} />
-              <Route path="account" element={<AccountPage />} />
+              <Route path="account/student/:id" element={<StudentAccountPage />} />
+              <Route path="account/teacher/:id" element={<TeacherAccountPage />} />
               <Route path="join" element={<JoinSession />} />
               <Route path="create" element={<CreateSession />} />
-              <Route path="session/:teacher/:room" element={<Session />} />
-              <Route path="session-data/:session" element={<SessionData />} />
+              <Route path="session/:teacher/:session" element={<Session />} />
+              <Route path="session-data/:teacher/:session" element={<SessionData />} />
+              <Route path="session-data/:teacher/:session" element={<SessionData />} />
               {/* <Route path='/account/:username' element={<UserRoute><AccountPage/></UserRoute>} /> */}
               {/* <Route path="/join" element={<UserRoute><JoinSession/></UserRoute>} /> */}
               {/* <Route path="/create" element={<UserRoute><CreateSession/></UserRoute>} /> */}
