@@ -10,7 +10,6 @@ const StyledCard = styled(Card)(({theme}) => {
 
 
 const DataCard = (props) => {
-
   const { emotion, ...rest } = props
   const [reactions, setReactions] = useState(props.reactions)
   const divRef = useRef(null)
@@ -19,6 +18,7 @@ const DataCard = (props) => {
 
 
   useEffect(() => {
+    setReactions(props.reactions)
     textRef.current.style.height = `${cardRef.current.offsetHeight}px`
     divRef.current.style.height = `${parseInt(reactions[emotion]*100/reactions['total'])}%`
   })
