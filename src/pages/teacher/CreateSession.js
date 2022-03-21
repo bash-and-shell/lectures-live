@@ -1,5 +1,6 @@
 import "../scss/JoinSession.scss"
 import React, { useEffect, useState, useContext } from 'react';
+import {useSession} from '../../hooks'
 import { UserContext } from '../../context/UserContext'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'
@@ -23,15 +24,28 @@ const theme = createTheme();
 
 const CreateSession = () => {
   // const { user } = useContext(UserContext)
+  const navigate = useNavigate();
+  const [sessionName, setSessionName] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
+  const { createSession, error } = useSession();
 
   const user = {
     username: "dummy"
   }
-  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if(sessionName === ''){
+      setErrorMessage('Session title cannot be empty');
+      return
+    }
+    
+    createSession(sessionName)
+    
+    if(error)
+      setErrorMessage(error)
 
+    navigate(`session-data/${user.username}/${sessionName}`)
   }
 
   return (
@@ -53,24 +67,32 @@ const CreateSession = () => {
           maxWidth='xs'
         >
           <Grid container sx={{ textAlign: 'center', alignItems: 'center' }}>
-            <Grid item xs={3}>
-              <Typography>
-                {user.username}/
-              </Typography>
-
-            </Grid>
-            <Grid item xs={9}>
-              <TextField
+            <TextField
                 margin="normal"
                 required
                 fullWidth
                 id="code"
-                label="Enter Room Code"
+                label="Enter Session Title"
                 name="code"
                 autoFocus
+                value={sessionName}
+                onChange={(e)=>{setSessionName(e.target.value)}}
+                error={errorMessage !== ''}
+                helperText={errorMessage !== '' ? errorMessage : null}
               // error={isValidUser === false}
               />
-            </Grid>
+              <Grid item xs={12}>
+              <Typography variant='h5' textAlign="center"> 
+                Your room code will be: 
+              </Typography>
+              </Grid>
+              <Grid item xs={12}>
+              <Typography variant='h6' textAlign="center"> 
+              {user.username}/{sessionName}
+              </Typography>
+
+                </Grid>
+              
 
           </Grid>
           <Button
