@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { UserContext } from '../context/UserContext';
 
-const useAuth = () => {
+export const useAuth = () => {
   const navigate = useNavigate();
   const {setUser}  = useContext(UserContext);
   const [error, setError] = useState(null);
@@ -54,5 +54,3 @@ const useAuth = () => {
     error
   }
 }
-
-export default useAuth

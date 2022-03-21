@@ -4,7 +4,7 @@ import { UserContext } from '../context/UserContext';
 import { SocketContext } from '../context/SocketContext';
 // import { io } from "socket.io-client";
 
-const useSockets = (room) => {
+export const useSockets = (room) => {
   const {socket} = useContext(SocketContext)
   const navigate = useNavigate();
   const {user}  = useContext(UserContext);
@@ -29,5 +29,3 @@ const useSockets = (room) => {
 
   return {sendResponse}
 }
-
-export default useSockets;

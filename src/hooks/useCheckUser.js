@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const useCheckUser = () => {
+export const useCheckUser = () => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -19,4 +19,3 @@ const useCheckUser = () => {
   return { user, setUser };
 }
 
-export default useCheckUser;
