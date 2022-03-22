@@ -6,7 +6,7 @@ export const useCheckUser = () => {
 
   useEffect(() => {
     const checkUser = async () => {
-      await axios.get('/users/checkUser')
+       axios.get('/users/checkUser')
         .then(res => {
           setUser(res.data.currentUser);
         }).catch(err => {
