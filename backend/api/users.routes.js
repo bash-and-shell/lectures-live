@@ -1,23 +1,31 @@
 import express from 'express';
 import checkAuth from '../middleware/checkAuth.js'
-import UsersController from './user.controller.js';
+import {
+  getUsers,
+  loginUser,
+  createUser,
+  checkUser,
+  logoutUser,
+  updateUser,
+  deleteUser
+} from './user.controller.js';
 const router = express.Router();
 
 router.route('/')
-.get(UsersController.getUsers)
+.get(getUsers)
 
 router.route('/register')
-.post(UsersController.createUser)
+.post(createUser)
 
 router.route('/checkUser')
-.get(UsersController.checkUser)
+.get(checkUser)
 
 router.route('/logout')
-.get(UsersController.logoutUser)
+.get(logoutUser)
 
 router.route('/user')
-.post(UsersController.getUser)
-.put(UsersController.updateUser)
-.delete( UsersController.deleteUser)
+.post(loginUser)
+.put(updateUser)
+.delete( deleteUser)
 
 export default router;
