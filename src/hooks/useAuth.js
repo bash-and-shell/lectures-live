@@ -10,11 +10,21 @@ export const useAuth = () => {
 
   //set user in context and push them to account page
   const setUserContext = async () => {
-    return await axios.get('/users/checkUser').then(res => {
+    return axios.get('/users/checkUser').then(res => {
       setUser(res.data.currentUser);
-      navigate('/account')
+      navigate(`/account/${res.data.currentUser.type}/${res.data.currentUser.username}`)
     }).catch((err) => {
       setError(err.response.data);
+    })
+  }
+
+   //set user in context and push them to account page
+   const checkUser = async () => {
+    return axios.get('/users/checkUser').then(res => {
+      setUser(res.data.currentUser);
+      navigate(`/account/${res.data.currentUser.type}/${res.data.currentUser.username}`)
+    }).catch((err) => {
+     return
     })
   }
 
@@ -36,7 +46,21 @@ export const useAuth = () => {
 
   //login user
   const loginUser = async (email, password) => {
-    axios.post('/users/user', JSON.stringify({
+     axios.post('/users/user', JSON.stringify({
+      email: email,
+      password: password,
+    })).then(async (response) => {
+        console.log(response);
+        await setUserContext();
+    }).catch((err) => {
+      console.error(err);
+      setError(err.response.data);
+    })
+  }
+
+   //login user
+   const logoutUser = async () => {
+    axios.post('/users/logout', JSON.stringify({
       email: email,
       password: password,
     })).then(async (response) => {
@@ -51,6 +75,8 @@ export const useAuth = () => {
   return {
     registerUser,
     loginUser,
+    checkUser,
+    logoutUser,
     error
   }
 }
