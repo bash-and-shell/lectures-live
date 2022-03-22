@@ -21,7 +21,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   const [isValidUser, setIsValidUser] = useState(null);
-  const { loginUser, error } = useAuth();
+  const { loginUser, checkUser, error } = useAuth();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -37,6 +37,9 @@ const Login = () => {
     }
   };
 
+  useEffect(()=> {
+    checkUser()
+  },[])
 
 
   return (
