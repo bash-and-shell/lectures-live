@@ -21,7 +21,7 @@ const DataCard = (props) => {
     setReactions(props.reactions)
     textRef.current.style.height = `${cardRef.current.offsetHeight}px`
     divRef.current.style.height = `${parseInt(reactions[emotion]*100/reactions['total'])}%`
-  })
+  }, [props.reactions])
 
   const getEmotion = () => {
     switch(emotion) {
