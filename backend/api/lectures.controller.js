@@ -1,7 +1,16 @@
 import Lecture from "../models/lecture.model.js"
+import jwt from 'jsonwebtoken'
 
-export default class LecturesController {
-  static async getLectures(req, res, next) {
+ const getUser = async (req) => {
+    let decoded
+      if (req.cookies.token) {
+        const token = req.cookies.token
+        decoded = await jwt.verify(token, process.env.JWT_SECRET)
+      }
+      return decoded.id
+  }
+    
+  export  const getLectures = async (req, res, next) => {
     try {
       const lectureList = await Lecture.find()
 
@@ -11,20 +20,23 @@ export default class LecturesController {
     }
   }
 
-  static async getUserLectures(req, res, next) {
+  export const getUserLectures = async (req, res, next) => {
     try {
+      //Don't need response data for this part
       const lectureList = await Lecture.find({
-        user_id: req.body.user_id
-      })
-
+        user_id: await getUser(req)
+      }, '_id title time')
+      
       return res.status(200).json(lectureList);
     } catch (err) {
+      console.log(err)
       return res.status(401).json({ success: false, lecture: false, msg: err.message })
     }
   }
 
-  static async getLecture(req, res, next) {
+  export const getLecture = async (req, res, next) => {
     try {
+      console.log(req.body.id)
       let lecture
       if(req.body.id) {
         lecture = await Lecture.findOne({
@@ -33,7 +45,7 @@ export default class LecturesController {
       }
       else {
         lecture = await Lecture.findOne({
-          user_id: req.body.user_id,
+          user_id: await getUser(req),
           title: req.body.title,
         })
       }
@@ -50,26 +62,35 @@ export default class LecturesController {
     }
   }
 
-  static async createLecture(req, res, next) {
+  export const createLecture = async (req, res, next) => {
     try {
-      const lecture = await Lecture.create({
-        user_id: req.body.user,
-        title: req.body.title,
-        responses: req.body.responses,
+      const lectureExists = await Lecture.findOne({
+        user_id: await getUser(req),
+        title: req.body.title
       })
 
-      console.log(`Lecture created: ${lecture}`)
-      return res.json({ success: true })
+      if (lectureExists) {
+        return res.status(401).json({ success: false, msg: "You already have a lecture with this name" })
+      }
+      
+      await Lecture.create({
+        user_id: await getUser(req), 
+        title: req.body.title,
+        responses: req.body.responses,
+        time: req.body.time,
+      })
+
+      return res.status(201).json({ success: true })
     } catch (err) {
       //more error handling
-      return res.json({ success: false, msg: err.message })
+      return res.status(401).json({ success: false, msg: err.message })
     }
   }
 
-  static async updateLecture(req, res, next) {
+  export const updateLecture = async (req, res, next) => {
     try {
       const lecture = await Lecture.updateOne({
-        user_id: req.body.user_id,
+        user_id: await getUser(req), 
         title: req.body.title,
       },
         {
@@ -79,17 +100,17 @@ export default class LecturesController {
           }
         })
       console.log(`Lecture updated: ${lecture}`)
-      return res.json({ success: true })
+      return res.status(201).json({ success: true })
     } catch (err) {
       //more error handling
       return res.json({ success: false, msg: err.message })
     }
   }
 
-  static async deleteLecture(req, res, next) {
+  export const deleteLecture = async (req, res, next) => {
     try {
       const lecture = await Lecture.deleteOne({
-        user_id: req.body.user_id,
+        user_id:req.body.user_id, 
         title: req.body.title,
       })
 
@@ -103,4 +124,3 @@ export default class LecturesController {
       return res.status(401).json({ success: false, lecture: false, msg: err.message })
     }
   }
-}

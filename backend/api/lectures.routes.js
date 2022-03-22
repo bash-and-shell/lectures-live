@@ -1,17 +1,23 @@
 import express from 'express';
 import checkAuth from '../middleware/checkAuth.js'
-import LecturesController from './lectures.controller.js';
+import {
+  getUserLectures,
+  createLecture,
+  getLecture,
+  updateLecture,
+  deleteLecture
+} from './lectures.controller.js';
 const router = express.Router();
 
 router.route('/getLectures')
-.get(LecturesController.getUserLectures)
+.get(getUserLectures)
 
 router.route('/createLecture')
-.post(LecturesController.createLecture)
+.post(createLecture)
 
 router.route('/lecture')
-.get(LecturesController.getLecture)
-.post(LecturesController.updateLecture)
-.delete(LecturesController.deleteLecture)
+.get(getLecture)
+.post(updateLecture)
+.delete(deleteLecture)
 
 export default router;
