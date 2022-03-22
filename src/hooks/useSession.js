@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { UserContext } from '../context/UserContext';
@@ -9,12 +9,11 @@ export const useSession = () => {
   const [error, setError] = useState(null);
   //set user in context and push them to account page
   const createSession = async (title) => {
-    return await axios.post('lectures/createLecture', JSON.stringify({
-      user_id: user.id,
+    return axios.post('lectures/createLecture', JSON.stringify({
       title,
-      time: new Date().getTime()
+      time: new Date().toString()
     })).then((response) =>{
-      navigate('/session-data')
+      navigate(`/${user.username}/session-data/${title}`)
       console.log(response);
     }).catch((error) => {
       setError(error.response.data);
@@ -22,7 +21,7 @@ export const useSession = () => {
   }
 
   const updateSession = async (title, responses) => {
-    return await axios.post('lectures/lecture', JSON.stringify({
+    return axios.post('lectures/lecture', JSON.stringify({
       user_id: user.id,
       title: title,
       responses: responses
@@ -34,15 +33,17 @@ export const useSession = () => {
   }
 
   const listSessions = async () => {
-    return await axios.get('lectures/getLectures', JSON.stringify({
-      user_id: user.id
-    })).catch((error) => {
+    return axios.get('lectures/getLectures').then((response)=>{
+      console.log(response);
+      return response.data
+    }).catch((error) => {
       setError(error.response.data);
     })
   }
 
   const getSession = async (id) => {
-    return await axios.get('lectures/lecture', JSON.stringify({
+    console.log(id)
+    return axios.get('lectures/lecture', JSON.stringify({
       id: id
     })).catch((error) => {
       setError(error.response.data);
