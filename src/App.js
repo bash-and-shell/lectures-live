@@ -12,6 +12,7 @@ import JoinSession from './pages/student/JoinSession'
 import Session from './pages/student/Session'
 import CreateSession from './pages/teacher/CreateSession'
 import SessionData from './pages/teacher/SessionData'
+import ViewSession from './pages/teacher/ViewSession'
 import {useCheckUser} from './hooks'
 
 const App = () => {
@@ -28,10 +29,11 @@ const App = () => {
               <Route path="account/student/:id" element={<StudentAccountPage />} />
               <Route path="account/teacher/:id" element={<TeacherAccountPage />} />
               <Route path="join" element={<JoinSession />} />
-              <Route path="create" element={<CreateSession />} />
+              <Route path="/:teacher/create" element={<CreateSession />} />
               <Route path="session/:teacher/:session" element={<Session />} />
-              <Route path="session-data/:teacher/:session" element={<SessionData />} />
-              <Route path="session-data/:teacher/:session" element={<SessionData />} />
+              <Route path="/:teacher/session-data/:session" element={<SessionData />} />
+              <Route path="/:teacher/session-data/:session" element={<SessionData />} />
+              <Route path="/:teacher/view-session/:session" element={<ViewSession />} />
               {/* <Route path='/account/:username' element={<UserRoute><AccountPage/></UserRoute>} /> */}
               {/* <Route path="/join" element={<UserRoute><JoinSession/></UserRoute>} /> */}
               {/* <Route path="/create" element={<UserRoute><CreateSession/></UserRoute>} /> */}
