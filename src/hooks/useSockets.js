@@ -15,8 +15,6 @@ export const useSockets = (room) => {
       return
     socket.emit("joinRoom", room, user)
 
-
-
     //dismount, leave room
     return () => {
       socket.emit("leaveRoom", room, user)
