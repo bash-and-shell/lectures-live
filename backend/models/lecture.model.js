@@ -1,18 +1,51 @@
 import mongoose from 'mongoose';
-import isEmail from 'validator/lib/isEmail.js';
 
 const responseSchema = new mongoose.Schema({
-  user_id: {type: mongoose.Types.ObjectId, required: true},
-  response_type: { type: String, enum: ['feeling', 'question'], required: true },
-  response : { type: String, required: true},
-  time: { type: Date, required: true }
+  user_id: {
+    type: mongoose.Types.ObjectId, 
+    description: 'user._id of the user who sent the response',
+    required: true
+  },
+  response_type: {
+     type: String, 
+     description: 'type of the response',
+     enum: ['feeling', 'question'], 
+     required: true 
+    },
+  response : { 
+    type: String, 
+    description: `Response data, if feeling one of:
+                  ["understand", "confused", "bored", "mind blown"], 
+                  or the question from the user`,
+    required: true
+  },
+  time: { 
+    type: Date, 
+    description: "Time of the event",
+    required: true 
+  }
 })
 
 const lectureSchema = new mongoose.Schema({
-  user_id: {type: mongoose.Types.ObjectId, required: true},
-  title: { type: 'string', required: true },
-  time: { type: Date, required: true },
-  responses: { type: [responseSchema] }
+  user_id: {
+    type: mongoose.Types.ObjectId, 
+    description: 'user._id of the teacher who created the session',
+    required: true
+  },
+  title: { 
+    type: 'string', 
+    description: 'Title of the session',
+    required: true 
+  },
+  time: { 
+    type: Date, 
+    description: 'Time of creation',
+    required: true 
+  },
+  responses: { 
+    type: [responseSchema], 
+    description: 'Array of response objects',
+  }
 },
   { collection: 'lectures' }
 )
