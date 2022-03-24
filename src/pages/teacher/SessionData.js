@@ -2,7 +2,7 @@ import "../scss/Session.scss"
 import React, { useEffect, useState, useContext } from 'react';
 import { UserContext } from '../../context/UserContext'
 import { SocketContext } from '../../context/SocketContext';
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { deepPurple } from '@mui/material/colors';
 import ReplayIcon from '@mui/icons-material/Replay';
@@ -33,6 +33,7 @@ const theme = createTheme({
 const SessionData = () => {
   const { user } = useContext(UserContext)
   const { socket } = useContext(SocketContext)
+  const navigate = useNavigate();
   const { teacher, session } = useParams();
   const [feelings, setFeelings] = useState({
     'understand': 0,
@@ -138,6 +139,7 @@ const SessionData = () => {
 
   const handleSaveSession = () => {
     updateSession(session, sessionData)
+    navigate(`/account/teacher/${user.username}`)
   }
 
   const getRows = () => {
