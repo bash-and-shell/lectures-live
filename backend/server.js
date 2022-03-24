@@ -40,6 +40,8 @@ io.on('connection', socket => {
 
   //on connection take params of room number/code and then join room of that code
   socket.on('joinRoom', (room, user) => {
+    if(user.type === 'student' && !io.sockets.adapter.rooms.get("room name"))
+      return
     socket.join(`${room}`)
     console.log(`User ${user.username} joined room ${room}`)
   })

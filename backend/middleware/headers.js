@@ -7,7 +7,6 @@ headers.use(bodyParser.json())
 headers.use(bodyParser.urlencoded({ extended: false }))
 
 headers.use((req, res, next) => {
-   
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader(
         "Access-Control-Allow-Headers",
