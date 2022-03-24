@@ -3,7 +3,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import {useSession} from '../../hooks'
 import { UserContext } from '../../context/UserContext'
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -23,15 +23,16 @@ import { Link as RouterLink } from 'react-router-dom';
 const theme = createTheme();
 
 const CreateSession = () => {
-  // const { user } = useContext(UserContext)
+  const { user } = useContext(UserContext)
   const navigate = useNavigate();
   const [sessionName, setSessionName] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
   const { createSession, error } = useSession();
+  const { teacher } = useParams()
 
-  const user = {
-    username: "dummy"
-  }
+  // const user = {
+  //   username: "dummy"
+  // }
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -44,8 +45,6 @@ const CreateSession = () => {
     
     if(error)
       setErrorMessage(error)
-
-    navigate(`session-data/${user.username}/${sessionName}`)
   }
 
   return (
@@ -88,7 +87,7 @@ const CreateSession = () => {
               </Grid>
               <Grid item xs={12}>
               <Typography variant='h6' textAlign="center"> 
-              {user.username}/{sessionName}
+              {teacher}/{sessionName}
               </Typography>
 
                 </Grid>
