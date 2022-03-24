@@ -43,10 +43,11 @@ export const useSession = () => {
 
   const getSession = async (id) => {
     console.log(id)
-    return axios.get('lectures/lecture', JSON.stringify({
-      id: id
-    })).catch((error) => {
+
+    return axios.get(`lectures/lecture`, {params: {id: id}}).catch((error) => {
       setError(error.response.data);
+    }).then((response) => {
+      return response.data.lecture
     })
   }
 
