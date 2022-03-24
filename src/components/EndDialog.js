@@ -27,7 +27,7 @@ export const EndDialog = (props) => {
 
   const handleSaveSession = () => {
     handleCloseDialog()
-    saveSession()
+    props.handleSaveSession();
   }
 
   return (
