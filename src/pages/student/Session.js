@@ -36,11 +36,10 @@ const theme = createTheme({
 const Session = () => {
   const { user } = useContext(UserContext)
   const navigate = useNavigate();
-  const { teacher, room } = useParams();
-  const { sendResponse } = useSockets(`${teacher}/${room}`)
+  const { teacher, session } = useParams();
+  const { sendResponse } = useSockets(`${teacher}/${session}`)
   const [selectedIndex, setSelectedIndex] = useState(null)
   const [questionValue, setQuestionValue] = useState('')
-
   const responses = ['understand', 'confused', 'bored', 'mind blown']
 
   const handleSelection = (e, index) => {
@@ -81,6 +80,7 @@ const Session = () => {
         <Grid container item backgroundColor="primary.main" sx={{ height: '30%', flexDirection: 'column-reverse' }}>
           <Typography variant="h4" component="div" id='heading'>
             How are you feeling in this lecture?
+            {session}
           </Typography>
           <Typography variant="h4" component="div" id='heading'>
             Hi username!
