@@ -3,7 +3,6 @@ import dotenv from 'dotenv';
 import { Server } from 'socket.io'
 import { createServer } from 'http';
 import cors from 'cors';
-import jwt from 'express-jwt';
 import cookieParser from 'cookie-parser';
 import headers from './middleware/headers.js'
 import users from './api/users.routes.js';
@@ -32,6 +31,7 @@ app.use(headers);
 
 app.use("/api/v1/users", users);
 app.use("/api/v1/lectures", lectures);
+
 
 app.use("*", (req, res, next) => res.status(404).json({ error: 'Route not found' }));
 

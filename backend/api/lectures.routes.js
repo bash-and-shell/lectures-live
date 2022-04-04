@@ -7,6 +7,7 @@ import {
   updateLecture,
   deleteLecture
 } from './lectures.controller.js';
+
 const router = express.Router();
 
 router.route('/getLectures')
