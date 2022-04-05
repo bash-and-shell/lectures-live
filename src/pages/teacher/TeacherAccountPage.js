@@ -105,25 +105,7 @@ const TeacherAccountPage = () => {
             </Typography>
           </Grid>
           <Grid container item xs={9} spacing={2} sx={{ marginTop: '0rem', paddingBottom: '1rem', paddingRight: "2rem !important" }}>
-          <Grid item xs={3} sx={{ height: '30%' }}>
-            <Button fullWidth sx={{height:'100%'}} variant="outlined">
-              +<br/>
-              Create Session
-            </Button>
-          </Grid>
-          <Grid item xs={3} sx={{ height: '30%' }}>
-            <Button fullWidth sx={{height:'100%'}} variant="outlined">
-              +<br/>
-              Create Session
-            </Button>
-          </Grid>
-          <Grid item xs={3} sx={{ height: '30%' }}>
-            <Button fullWidth sx={{height:'100%'}} variant="outlined">
-              +<br/>
-              Create Session
-            </Button>
-          </Grid>
-          <Grid item xs={3} sx={{ height: '30%' }}>
+          <Grid item xs={12} sx={{ height: '30%' }}>
             <Button fullWidth sx={{height:'100%'}} variant="outlined">
               +<br/>
               Create Session
