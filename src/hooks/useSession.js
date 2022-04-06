@@ -8,7 +8,7 @@ export const useSession = () => {
   const {user}  = useContext(UserContext);
   const [error, setError] = useState(null);
   //set user in context and push them to account page
-  const createSession = async (title) => {
+  const createSession = (title) => {
     return axios.post('lectures/createLecture', JSON.stringify({
       title,
       time: new Date().toString()
@@ -20,7 +20,7 @@ export const useSession = () => {
     })
   }
 
-  const updateSession = async (title, responses) => {
+  const updateSession = (title, responses) => {
     return axios.post('lectures/lecture', JSON.stringify({
       user_id: user.id,
       title: title,
@@ -32,7 +32,7 @@ export const useSession = () => {
     })
   }
 
-  const listSessions = async () => {
+  const listSessions = () => {
     return axios.get('lectures/getLectures').then((response)=>{
       console.log(response);
       return response.data
@@ -41,7 +41,7 @@ export const useSession = () => {
     })
   }
 
-  const getSession = async (id) => {
+  const getSession = (id) => {
     console.log(id)
 
     return axios.get(`lectures/lecture`, {params: {id: id}}).catch((error) => {

@@ -5,7 +5,8 @@ import {
   createLecture,
   getLecture,
   updateLecture,
-  deleteLecture
+  deleteLecture,
+  getResponse
 } from './lectures.controller.js';
 
 const router = express.Router();
@@ -20,5 +21,8 @@ router.route('/lecture')
 .get(getLecture)
 .post(updateLecture)
 .delete(deleteLecture)
+
+router.route('/response')
+.get(getResponse)
 
 export default router;

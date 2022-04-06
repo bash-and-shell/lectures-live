@@ -1,5 +1,7 @@
 import Lecture from "../models/lecture.model.js"
 import jwt from 'jsonwebtoken'
+import mongoose from 'mongoose';
+import User from '../models/user.model.js'
 
 const getUser = async (req) => {
   let decoded
@@ -112,5 +114,35 @@ export const deleteLecture = async (req, res, next) => {
     }
   } catch (err) {
     return res.status(401).json({ success: false, lecture: false, msg: err.message })
+  }
+}
+
+export const getResponse = async (req, res, next) => {
+  try {
+    const response = await Lecture.find({
+      'responses._id' : mongoose.Types.ObjectId(req.query.id)
+    }, {
+      responses: {
+        '$elemMatch' : {
+          "_id": mongoose.Types.ObjectId(req.query.id)
+        }
+      }
+    })
+
+    console.log(response[0].responses[0])
+
+    const user = await User.findOne({
+      "_id": mongoose.Types.ObjectId(response[0].responses[0].user_id)
+    })
+
+    console.log(user)
+
+
+    if(response) {
+      return res.status(200).json({ success: true, response: response[0].responses[0], user: user.username})
+    }
+
+  } catch (err) {
+    return res.status(404).json({ success: false, response: false, msg: err.message })
   }
 }
