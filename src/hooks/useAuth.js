@@ -9,28 +9,27 @@ export const useAuth = () => {
   const [error, setError] = useState(null);
 
   //set user in context and push them to account page
-  const setUserContext = async () => {
-    return axios.get('/users/checkUser').then(res => {
+  const setUserContext = () => {
+    axios.get('/users/checkUser').then(res => {
       setUser(res.data.currentUser);
       navigate(`/account/${res.data.currentUser.type}/${res.data.currentUser.username}`)
     }).catch((err) => {
       setError(err.response.data);
+      navigate('/login')
     })
   }
 
    //set user in context and push them to account page
-   const checkUser = async () => {
-    return axios.get('/users/checkUser').then(res => {
+   const checkUser = () => {
+    axios.get('/users/checkUser').then(res => {
       setUser(res.data.currentUser);
       navigate(`/account/${res.data.currentUser.type}/${res.data.currentUser.username}`)
-    }).catch((err) => {
-     return
     })
   }
 
   //register user
-  const registerUser = async (email, username, password, type) => {
-    return axios.post('/users/register', JSON.stringify({
+  const registerUser = (email, username, password, type) => {
+    axios.post('/users/register', JSON.stringify({
       email: email,
       username: username,
       password: password,
@@ -45,13 +44,13 @@ export const useAuth = () => {
   };
 
   //login user
-  const loginUser = async (email, password) => {
+  const loginUser = (email, password) => {
      axios.post('/users/user', JSON.stringify({
       email: email,
       password: password,
-    })).then(async (response) => {
+    })).then((response) => {
         console.log(response);
-        await setUserContext();
+        setUserContext();
     }).catch((err) => {
       console.error(err);
       setError(err.response.data);
@@ -59,17 +58,16 @@ export const useAuth = () => {
   }
 
    //login user
-   const logoutUser = async () => {
-    axios.post('/users/logout', JSON.stringify({
-      email: email,
-      password: password,
-    })).then(async (response) => {
+   const logoutUser =  () => {
+    axios.post('/users/logout').then((response) => {
         console.log(response);
-        await setUserContext();
+        setUserContext();
     }).catch((err) => {
       console.error(err);
       setError(err.response.data);
     })
+
+    navigate('/login')
   }
 
   return {
