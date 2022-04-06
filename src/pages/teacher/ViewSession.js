@@ -1,5 +1,6 @@
 import "../scss/Session.scss"
 import React, { useEffect, useState, useContext } from 'react';
+import axios from 'axios';
 import { UserContext } from '../../context/UserContext'
 import { SocketContext } from '../../context/SocketContext';
 import { useParams, useLocation } from 'react-router-dom'
@@ -10,6 +11,7 @@ import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import DataCard from '../../components/DataCard'
 import { DataGrid } from '@mui/x-data-grid'
 import { useChart, useSession } from '../../hooks'
+import BackButton from '../../components/BackButton'
 import {
   Avatar,
   Button,
@@ -17,7 +19,12 @@ import {
   Typography,
   Container,
   Grid,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions
 } from '@mui/material'
+import ms from 'pretty-ms'
 
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
@@ -35,28 +42,25 @@ const ViewSession = () => {
   const { user } = useContext(UserContext)
   const { state } = useLocation();
   const { teacher, session } = useParams();
-  const [questionList, setQuestionList] = useState([])
-  const { sessionData, chartOptions, chartSeries } = useChart(state.id, theme)
+  const { questionList, chartOptions, chartSeries } = useChart(state.id, theme)
+  const [dialogOpen, setDialogOpen] = useState(false)
+  const [currentQuestion, setCurrentQuestion] = useState({ question: null, user: null, time: null })
 
-  const feelings =  {
-    'understand': 0,
-    'confused': 0,
-    'bored': 0,
-    'mind blown': 0,
-    'total': 0,
+  const getResponse = async (params) => {
+    return axios.get(`lectures/response`, { params: { id: params.id } }).catch((error) => {
+      setError(error.response.data);
+    }).then((response) => {
+      setCurrentQuestion({ question: response.data.response.response, user: response.data.user, time: ms(params.row.col1)})
+    })
   }
 
-  useEffect(() => {
-    console.log(chartSeries)
-  }, [chartSeries])
-  
   const getRows = () => {
     const rows = []
     questionList.map((question, index) => {
       rows.push({
-        id: index,
-        col1: question.username,
-        col2: question.question
+        id: question._id,
+        col1: question.time,
+        col2: question.question,
       })
     })
 
@@ -65,9 +69,27 @@ const ViewSession = () => {
 
   const getColumns = () => {
     return [
-      { field: 'col1', headerName: 'From', flex: 1 },
-      { field: 'col2', headerName: 'Question List', flex: 6 },
+      { field: 'col1', headerName: 'Time', flex: 1, renderCell: (params) => timeFormatter(params.value) },
+      { field: 'col2', headerName: 'Question List', flex: 6, sortable: false },
+      { field: 'col3', headerName: 'View', flex: 2, renderCell: (params) => renderCellButton(params), disableClickEventBubbling: true, },
     ]
+  }
+
+  //format here so that sorting by time works correctly
+  const timeFormatter = (cell) => {
+    return ms(cell)
+  }
+
+  const renderQuestionDialog = (params) => {
+    getResponse(params)
+    setDialogOpen(true)
+  }
+
+  const renderCellButton = (params) => {
+    return (
+      //return dialog with user info of who sent
+      <Button onClick={() => renderQuestionDialog(params)}>View Info</Button>
+    )
   }
 
   const NoRowsOverlay = () => {
@@ -86,8 +108,10 @@ const ViewSession = () => {
     )
   }
 
+
   return (
     <ThemeProvider theme={theme}>
+      <BackButton/>
       <Grid container spacing={2} sx={{ position: 'fixed', top: 0, bottom: 0 }}>
         <Grid item xs={3} height="100%" sx={{ backgroundColor: 'primary.main', display: 'flex', flexDirection: 'column', paddingTop: "2rem !important" }}>
           <Avatar sx={{ bgcolor: deepPurple[500], height: 60, width: 60, alignSelf: 'center' }}></Avatar>
@@ -102,77 +126,58 @@ const ViewSession = () => {
           </Typography>
         </Grid>
         <Grid container item xs={9} spacing={2} sx={{ marginTop: '0rem', paddingBottom: '1rem', paddingRight: "2rem !important" }}>
-          {/* <Grid item xs={3} sx={{ height: '30%' }}>
-            <Paper elevation={0} sx={{ flexGrow: 1, height: '100%' }}>
-              <DataCard emotion="understand" reactions={feelings} />
-            </Paper>
-          </Grid>
-          <Grid item xs={3} sx={{ height: '30%' }}>
-            <Paper elevation={0} sx={{ flexGrow: 1, height: '100%' }}>
-              <DataCard emotion="confused" reactions={feelings} />
-            </Paper>
-          </Grid>
-          <Grid item xs={3} sx={{ height: '30%' }}>
-            <Paper elevation={0} sx={{ flexGrow: 1, height: '100%' }}>
-              <DataCard emotion="bored" reactions={feelings} />
-            </Paper>
-          </Grid>
-          <Grid item xs={3} sx={{ height: '30%' }}>
-            <Paper elevation={0} sx={{ flexGrow: 1, height: '100%' }}>
-              <DataCard emotion="mind blown" reactions={feelings} />
-            </Paper>
-          </Grid> */}
-          <Grid item xs={12} sx={{ height: '55%' }}>
+          <Grid item xs={12} sx={{ height: '50%' }}>
             <Paper elevation={1} sx={{ flexGrow: 1, height: '100%' }}>
-              {/* <DataGrid
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart
+
+                  data={chartSeries}
+                  margin={{
+                    top: 5,
+                    right: 30,
+                    left: 20,
+                    bottom: 5,
+                  }}
+                >
+                  <Legend iconType='circle' formatter={(value, entry) => { return <span style={{ color: 'black' }}>{value}</span>; }} />
+                  <XAxis dataKey="time"
+                    interval={10}
+                  />
+                  <YAxis />
+                  <Tooltip />
+                  <Line strokeWidth={5} dot={false} type="monotone" dataKey="Understand" stroke="#81c784" activeDot={{ r: 8 }} />
+                  <Line strokeWidth={5} dot={false} type="monotone" dataKey="Confused" stroke="#fff176" activeDot={{ r: 8 }} />
+                  <Line strokeWidth={5} dot={false} type="monotone" dataKey="Bored" stroke="#e0e0e0" activeDot={{ r: 8 }} />
+                  <Line strokeWidth={5} dot={false} type="monotone" dataKey="Mind Blown" stroke="#e57373" activeDot={{ r: 8 }} />
+                </LineChart>
+              </ResponsiveContainer>
+            </Paper>
+          </Grid>
+          <Grid item xs={12} height='50%'>
+            <Paper elevation={1} sx={{ flexGrow: 1, height: '100%' }}>
+              <DataGrid
                 rows={getRows()}
                 columns={getColumns()}
                 components={{
                   NoRowsOverlay: NoRowsOverlay
                 }}
                 hideFooter
-              /> */}
-              {/* <Chart
-                type='line'
-                options={chartOptions}
-                series={chartSeries}
-              /> */}
-            <ResponsiveContainer width="100%" height="100%">
-        <LineChart
-         
-          data={chartSeries}
-          margin={{
-            top: 5,
-            right: 30,
-            left: 20,
-            bottom: 5,
-          }}
-        >
-                    <Legend iconType='circle' formatter={(value, entry) => {return <span style={{color: 'black'}}>{value}</span>;}}/>
-
-          <XAxis dataKey="time" 
-          interval={10}
-          // ticks={['1m']}
-          // allowDuplicatedCategory={false}
-
-          // tickFormatter = {(time) => {
-          //   const t = new Date(time)
-
-          //   return (t.getHours() - 1)+ ':' + t.getMinutes()
-          // }}
-          />
-          <YAxis />
-          <Tooltip />
-          <Line strokeWidth={5} dot={false} type="monotone" dataKey="Understand" stroke="#81c784" activeDot={{ r: 8 }} />
-          <Line strokeWidth={5} dot={false} type="monotone" dataKey="Confused" stroke="#fff176" activeDot={{ r: 8 }}/>
-          <Line strokeWidth={5} dot={false} type="monotone" dataKey="Bored" stroke="#e0e0e0" activeDot={{ r: 8 }}/>
-          <Line strokeWidth={5} dot={false} type="monotone" dataKey="Mind Blown" stroke="#e57373" activeDot={{ r: 8 }}/>
-        </LineChart>
-      </ResponsiveContainer>
+              />
             </Paper>
           </Grid>
         </Grid>
       </Grid>
+      <Dialog
+        open={dialogOpen}
+        onClose={() => { setDialogOpen(false) }}
+      >
+        <DialogTitle>Question Info</DialogTitle>
+        <DialogContent>
+          <Typography>- Asked By: {currentQuestion.user}</Typography>
+          <Typography>- Content: {currentQuestion.question}</Typography>
+          <Typography>- Time: {currentQuestion.time}</Typography>
+        </DialogContent>
+      </Dialog>
     </ThemeProvider>
   )
 }
