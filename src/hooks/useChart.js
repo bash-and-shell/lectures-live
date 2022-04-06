@@ -4,7 +4,7 @@ import ms from 'pretty-ms'
 
 export const useChart = (id) => {
   const { getSession } = useSession();
-  const [sessionData, setSessionData] = useState([])
+  const [questionList, setQuestionList] = useState([])
   const [chartOptions, setChartOptions] = useState({
     chart: {
       id: 'line'
@@ -42,7 +42,6 @@ export const useChart = (id) => {
     const fetchData = async () => {
       const data = await getSession(id)
       console.log(data)
-      setSessionData(data)
 
       setChartOptions({
         chart: {
@@ -94,30 +93,36 @@ export const useChart = (id) => {
           }
         }
 
+        
+
         currentFeelings = { ...currentFeelings, ...updateResponse }
         const timeDiff = new Date(response.time) - new Date(data.time)
 
-        console.log(timeDiff.toString())
         chartSeriesData.push({
           time: ms(timeDiff),
-          Understand: currentFeelings.understand * 100 / currentFeelings.total
-        ,
-        
-          Confused : currentFeelings.confused * 100 / currentFeelings.total
-        ,
-        
-          Bored: currentFeelings.bored * 100 / currentFeelings.total
-        ,
-        
+          Understand: currentFeelings.understand * 100 / currentFeelings.total,
+          Confused : currentFeelings.confused * 100 / currentFeelings.total,
+          Bored: currentFeelings.bored * 100 / currentFeelings.total,
           'Mind Blown': currentFeelings['mind blown'] * 100 / currentFeelings.total
         })
         
+        if(response.response_type === 'question') {
+          setQuestionList((currentList) => {
+            return ([...currentList, {
+              username: response.username,
+              question: response.response,
+              time: timeDiff,
+              _id: response._id
+            }])
+          })
+        }
       })
 
       setChartSeries(chartSeriesData)
     }
+
     fetchData()
   }, [])
 
-  return { sessionData, chartOptions, chartSeries }
+  return { questionList, chartOptions, chartSeries }
 }
