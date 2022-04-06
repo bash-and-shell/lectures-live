@@ -61,7 +61,7 @@ const TeacherAccountPage = () => {
   const renderCellButton = (params) => {
     console.log(params)
     return (
-        <Button onClick={()=>{navigate(`/${user.username}/view-session/${params.row.col1}`, {replace: true, state: {id: params.id}})}}>Click</Button>
+        <Button onClick={()=>{navigate(`/${user.username}/view-session/${params.row.col1}`, {replace: true, state: {id: params.id}})}}>View</Button>
      )
   }
  
@@ -106,7 +106,7 @@ const TeacherAccountPage = () => {
           </Grid>
           <Grid container item xs={9} spacing={2} sx={{ marginTop: '0rem', paddingBottom: '1rem', paddingRight: "2rem !important" }}>
           <Grid item xs={12} sx={{ height: '30%' }}>
-            <Button fullWidth sx={{height:'100%'}} variant="outlined">
+            <Button fullWidth sx={{height:'100%'}} variant="outlined" onClick={() => {navigate(`/${user.username}/create`)}}>
               +<br/>
               Create Session
             </Button>
