@@ -60,7 +60,7 @@ export const checkUser = async (req, res, next) => {
     console.log(currentUser)
   }
   else {
-    return res.status(401)
+    return res.status(401).json({ currentUser: null })
   }
 
   const returnUser = {
@@ -74,7 +74,6 @@ export const checkUser = async (req, res, next) => {
 
 export const logoutUser = async (req, res, next) => {
   res.clearCookie('token').status(202)
-  res.redirect('/');
   return res.json({ success: true, msg: 'user is logged out' });
 }
 
