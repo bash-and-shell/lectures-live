@@ -59,10 +59,10 @@ const SessionData = () => {
       // handle question
       if (response.response_type === 'question') {
         setQuestionList((currentList) => {
-          return ([...currentList, {
+          return ([{
             username: response.username,
             question: response.response
-          }])
+          }, ...currentList])
         })
       }
 
