@@ -36,42 +36,42 @@ const AccountPage = () => {
   const [confirmValid, setConfirmValid] = useState(null)
   const [strongPassword, setStrongPassword] = useState(null)
   const { updateUser, logoutUser, error, setError } = useAuth()
-  const [ successMessage, setSuccessMessage ] = useState(null)
+  const [successMessage, setSuccessMessage] = useState(null)
   const handleForm = (e) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
-    if(!data.get('email') && !data.get('username') && !data.get('password')) {
+    if (!data.get('email') && !data.get('username') && !data.get('password')) {
       setError("No data entered")
       return
     }
     let updateData = {}
-    if(data.get('email')) {
+    if (data.get('email')) {
       setEmailValid(isEmail(data.get('email')))
-      if(!emailValid)
+      if (!emailValid)
         return
       updateData.email = data.get('email')
     }
 
-    if(data.get('username')) {
+    if (data.get('username')) {
       updateData.username = data.get('username')
     }
 
-    if(data.get('password') && data.get('confirmPassword')) {
-      if(data.get('password') !== data.get('confirmPassword')) {
+    if (data.get('password') && data.get('confirmPassword')) {
+      if (data.get('password') !== data.get('confirmPassword')) {
         setConfirmValid(false)
         return
       }
-      
+
       setStrongPassword(isStrongPassword(data.get('password')))
-      if(!strongPassword)
+      if (!strongPassword)
         return
-      
+
       updateData.password = data.get('password')
     }
-    
+
     updateUser(updateData)
 
-    if(!error) {
+    if (!error) {
       setSuccessMessage("Account updated successfully")
     }
   }
@@ -93,8 +93,6 @@ const AccountPage = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      {/* <PageHeader /> */}
-
       <Grid container>
         <Grid item backgroundColor="primary.main" xs={12} sx={{ height: '5rem' }}>
           <BackButton sx={{ paddingLeft: '2rem' }} />
@@ -110,143 +108,71 @@ const AccountPage = () => {
             </Typography>
           </Grid>
           <Container maxWidth='xs'>
-              <Box component="form" onSubmit={handleForm} noValidate sx={{ mt: 1 }}>
+            <Box component="form" onSubmit={handleForm} noValidate sx={{ mt: 1 }}>
               <Grid container spacing={2}>
                 <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  id="username"
-                  label="Username"
-                  name="username"
-                  error={usernameValid === false}
-                  helperText={usernameValid === false ? "This username already exists" : null}
-                />
+                  <TextField
+                    fullWidth
+                    id="username"
+                    label="Username"
+                    name="username"
+                    error={usernameValid === false}
+                    helperText={usernameValid === false ? "This username already exists" : null}
+                  />
                 </Grid>
                 <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  id="email"
-                  label="Email"
-                  name="email"
-                  error={usernameValid === false}
-                  helperText={usernameValid === false ? "This username already exists" : null}
-                />
+                  <TextField
+                    fullWidth
+                    id="email"
+                    label="Email"
+                    name="email"
+                    error={usernameValid === false}
+                    helperText={usernameValid === false ? "This username already exists" : null}
+                  />
                 </Grid>
                 <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  id="password"
-                  label="New Password"
-                  name="password"
-                  error={strongPassword === false}
-                  helperText={strongPassword === false ? passwordRequirementsText() : null}
-                />
+                  <TextField
+                    fullWidth
+                    id="password"
+                    label="New Password"
+                    name="password"
+                    error={strongPassword === false}
+                    helperText={strongPassword === false ? passwordRequirementsText() : null}
+                  />
                 </Grid>
                 <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="confirmPassword"
-                  label="Confirm Password"
-                  name="confirmPassword"
-                  error={confirmValid === false}
-                  helperText={confirmValid === false ? "Please ensure passwords match" : null}
-                />
+                  <TextField
+                    required
+                    fullWidth
+                    id="confirmPassword"
+                    label="Confirm Password"
+                    name="confirmPassword"
+                    error={confirmValid === false}
+                    helperText={confirmValid === false ? "Please ensure passwords match" : null}
+                  />
                 </Grid>
                 {error &&
-                <Grid item xs={12}>
-                  <Alert severity="error">{error}</Alert>
-                </Grid>}
+                  <Grid item xs={12}>
+                    <Alert severity="error">{error}</Alert>
+                  </Grid>}
                 {successMessage &&
+                  <Grid item xs={12}>
+                    <Alert severity="success">{successMessage}</Alert>
+                  </Grid>}
                 <Grid item xs={12}>
-                  <Alert severity="success">{successMessage}</Alert>
-                </Grid>}
-                <Grid item xs={12}>
-                <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-            >
-              Update Info
-            </Button>
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                  >
+                    Update Info
+                  </Button>
                 </Grid>
-
-               
-                            </Grid>
-              </Box>
+              </Grid>
+            </Box>
           </Container>
-
         </Grid>
       </Grid>
-      {/* <Box backgroundColor="primary.main"
-          sx={{
-            height: '30vh',
-            // flexGrow: 4,
-            // marginTop: 4,
-            display: 'flex',
-            flexDirection: 'column',
-            // alignItems: 'center',
-          }}
-        >
-        </Box>
-        <Box 
-        sx={{
-          height: '70vh',
-          flexGrow: 6,
-          // marginTop: 4,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-        >
-          <Avatar id="user-icon" sx={{ bgcolor: deepPurple[500], height: 60, width: 60 }}></Avatar>
-
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-          <Typography variant="h5" component="div" id='heading'>
-            *username*
-          </Typography>
-          </Grid>
-          <Grid item xs={12}>
-
-          <Typography variant="body1" component="div">
-           Change your account info here
-          </Typography>
-
-          </Grid>
-
-          <Grid item xs={12}>
-
-          <Box component="form" onSubmit={handleChangeUsername} noValidate sx={{ mt: 1 }}>
-          <Typography variant="body1" component="div">
-           Username
-          </Typography>
-          <TextField
-                  required
-                  fullWidth
-                  id="username"
-                  label="Username"
-                  name="username"
-                  autoComplete="username"
-                  error={usernameValid === false}
-                  helperText={usernameValid === false ? "This username already exists" : null}
-                />
-          </Box>
-          </Grid>
-
-            //TODO: Have account options on page -> change username, password etc.
-
-            //TODO: Show stats for teachers
-
-
-
-            //TODO: Floating button to join session
-
-
-          }
-        </Grid>
-        onClick={() => navigate('/join')}
-        </Box> */}
       <SpeedDial
         ariaLabel="SpeedDial basic example"
         sx={{ position: 'fixed', bottom: '1rem', right: '1rem' }}
