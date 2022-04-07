@@ -18,6 +18,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Link as RouterLink } from 'react-router-dom';
+import BackButton from "../../components/BackButton";
 
 
 const theme = createTheme();
@@ -29,10 +30,6 @@ const CreateSession = () => {
   const [errorMessage, setErrorMessage] = useState('')
   const { createSession, error } = useSession();
   const { teacher } = useParams()
-
-  // const user = {
-  //   username: "dummy"
-  // }
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -49,7 +46,7 @@ const CreateSession = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      {/* <PageHeader /> */}
+      <BackButton/>
       <Grid container backgroundColor="primary.main" sx={{ height: '30vh', flexDirection: 'column-reverse' }}>
         <Typography variant="h3" component="div" id='heading' >
           Create Session
