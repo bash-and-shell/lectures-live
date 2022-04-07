@@ -5,13 +5,13 @@ import { SocketContext } from '../../context/SocketContext';
 import { useNavigate, useParams } from 'react-router-dom'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { deepPurple } from '@mui/material/colors';
-import ReplayIcon from '@mui/icons-material/Replay';
-import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import { DataGrid } from '@mui/x-data-grid'
 import { SessionDialog } from '../../components'
-import { useSession, useSockets } from '../../hooks'
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import AddIcon from '@mui/icons-material/Add';
 import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
-import SchoolIcon from '@mui/icons-material/School';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { useSession, useAuth } from '../../hooks'
 import {
   Avatar,
   Button,
@@ -19,8 +19,8 @@ import {
   Typography,
   Container,
   Grid,
-  Fab
 } from '@mui/material'
+import BackButton from "../../components/BackButton";
 
 const theme = createTheme({
   palette: {
@@ -38,6 +38,7 @@ const TeacherAccountPage = () => {
 
   const [rows, setRows] = useState([])
   const { listSessions, getSession } = useSession()
+  const { logoutUser } = useAuth()
 
   useEffect(() => {
     const fetchSessions = async () => {
@@ -91,24 +92,34 @@ const TeacherAccountPage = () => {
   
   return (
     <ThemeProvider theme={theme}>
+      <BackButton/>
         <Grid container spacing={2} sx={{ position: 'fixed', top: 0, bottom: 0 }}>
-          <Grid item xs={3} height="100%" sx={{ backgroundColor: 'primary.main', display: 'flex', flexDirection: 'column', paddingTop: "2rem !important" }}>
+          <Grid item xs={3} height="100%" sx={{ backgroundColor: 'primary.main', display: 'flex', flexDirection: 'column', paddingTop: "4rem !important" }}>
             <Avatar sx={{ bgcolor: deepPurple[500], height: 60, width: 60, alignSelf: 'center' }}></Avatar>
-            <Typography variant='h4' textAlign="center">
-              Hi, username!
+            <Typography variant='h4' textAlign="center" color='white'>
+              Hi, {id}!
             </Typography>
-            <Typography variant='h4' textAlign="center">
-              Here is the data for lecture
-            </Typography>
-            <Typography variant='h4' textAlign="center">
-              *lecture name*
+            <Typography variant='h4' textAlign="center" color='white'>
+              Welcome to your account page
             </Typography>
           </Grid>
           <Grid container item xs={9} spacing={2} sx={{ marginTop: '0rem', paddingBottom: '1rem', paddingRight: "2rem !important" }}>
-          <Grid item xs={12} sx={{ height: '30%' }}>
-            <Button fullWidth sx={{height:'100%'}} variant="outlined" onClick={() => {navigate(`/${user.username}/create`)}}>
-              +<br/>
+          <Grid item xs={4} sx={{ height: '30%' }}>
+            <Button fullWidth sx={{height:'100%', display: 'flex', flexDirection: 'column'}} variant="outlined" onClick={() => {navigate(`/${user.username}/create`)}}>
+            <AddIcon color='primary'/>
               Create Session
+            </Button>
+          </Grid>
+          <Grid item xs={4} sx={{ height: '30%' }}>
+            <Button fullWidth sx={{height:'100%', display: 'flex', flexDirection: 'column'}} variant="outlined" onClick={() => {navigate(`info`)}}>
+            <ManageAccountsIcon color='primary'/>
+              Account Info
+            </Button>
+          </Grid>
+          <Grid item xs={4} sx={{ height: '30%' }}>
+            <Button fullWidth sx={{height:'100%', display: 'flex', flexDirection: 'column'}} variant="outlined" onClick={() => {logoutUser()}}>
+            <LogoutIcon color='primary'/>
+              Sign Out
             </Button>
           </Grid>
           <Grid container item xs={12} sx={{ height: '70%' }}>
@@ -124,9 +135,6 @@ const TeacherAccountPage = () => {
             </Paper>
           </Grid>
           </Grid>
-          {/* <Fab variant='extended' color='primary' id='fab-join' onClick={() => navigate('/join')}>
-          Join Session
-        </Fab> */}
         </Grid>
     </ThemeProvider>
   )
