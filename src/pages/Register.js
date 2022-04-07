@@ -16,10 +16,10 @@ import Container from '@mui/material/Container';
 import Alert from '@mui/material/Alert';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Link as RouterLink } from 'react-router-dom';
-import PageHeader from '../components/PageHeader'
 import isEmail from 'validator/lib/isEmail';
 import isStrongPassword from 'validator/lib/isStrongPassword';
 import { useAuth } from '../hooks'
+import BackButton from '../components/BackButton';
 
 const theme = createTheme();
 
@@ -36,7 +36,7 @@ const SignUp = () => {
   const [usernameValid, setUsernameValid] = useState(null)
   const { registerUser, error } = useAuth();
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
@@ -46,7 +46,7 @@ const SignUp = () => {
     if (emailValid && strongPassword) {
       console.log("here");
 
-      await registerUser(
+      registerUser(
         data.get('email'),
         data.get('username'),
         data.get('password'),
@@ -72,7 +72,7 @@ const SignUp = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <PageHeader />
+      <BackButton/>
       <Container component="main" maxWidth="xs">
         <Box
           sx={{

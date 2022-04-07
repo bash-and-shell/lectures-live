@@ -13,6 +13,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useAuth } from '../hooks'
+import BackButton from '../components/BackButton';
 
 const theme = createTheme();
 
@@ -23,11 +24,11 @@ const Login = () => {
   const [isValidUser, setIsValidUser] = useState(null);
   const { loginUser, checkUser, error } = useAuth();
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
-    await loginUser(
+    loginUser(
       formData.get('email'),
       formData.get('password'),
     )
@@ -44,6 +45,7 @@ const Login = () => {
 
   return (
     <ThemeProvider theme={theme}>
+      <BackButton/>
       <Container component="main" maxWidth="xs">
         <Box
           sx={{
