@@ -2,15 +2,7 @@ import Lecture from "../models/lecture.model.js"
 import jwt from 'jsonwebtoken'
 import mongoose from 'mongoose';
 import User from '../models/user.model.js'
-
-const getUser = async (req) => {
-  let decoded
-  if (req.cookies.token) {
-    const token = req.cookies.token
-    decoded = await jwt.verify(token, process.env.JWT_SECRET)
-  }
-  return decoded.id
-}
+import { getUser } from './user.helper.js'
 
 export const getLectures = async (req, res, next) => {
   try {

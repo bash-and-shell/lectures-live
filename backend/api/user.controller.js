@@ -2,6 +2,7 @@ import User from "../models/user.model.js"
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import mongoose from 'mongoose';
+import { getUser } from './user.helper.js'
 
 
 export const getUsers = async (req, res, next) => {
@@ -129,29 +130,55 @@ export const createUser = async (req, res, next) => {
 }
 
 export const updateUser = async (req, res, next) => {
-    try {
+  try {
+    if (req.body.email) {
+      const userExist = await User.findOne({ email: req.body.email })
+
+      if (userExist) {
+        return res.status(401).json({ success: false, msg: 'User with this email already exists' })
+      }
+    }
+
+    if (req.body.username) {
+      const usernameExists = await User.findOne({ username: req.body.username })
+
+      if (usernameExists) {
+        return res.status(401).json({ success: false, msg: 'Username already exists' })
+      }
+    }
+
+
+    const findUser = await User.findOne({
+      _id: await getUser(req)
+    })
+
+    let password = findUser.password
+    if(req.body.password) {
+      await bcrypt.hash(req.body.password, 10)
+    }
+
     const user = await User.updateOne({
-      email: req.body.email,
-      password: req.body.password,
+      _id: await getUser(req)
     },
       {
         $set: {
-          email: req.body.new_email,
-          password: req.body.new_password,
-          type: req.body.new_type,
+          email: req.body.email || findUser.email,
+          username: req.body.username || findUser.username,
+          password: password
+          // type: req.body.new_type,
         }
       })
     console.log(`User updated: ${user}`)
-    return res.json({ success: true })
+    return res.status(203).json({ success: true })
   }
   catch (err) {
     //more error handling
-    return res.json({ success: false, msg: err.message })
+    return res.status(401).json({ success: false, msg: err.message })
   }
 }
 
 export const deleteUser = async (req, res, next) => {
-    try {
+  try {
     const user = await User.deleteOne({
       email: req.body.email,
       password: req.body.password,
