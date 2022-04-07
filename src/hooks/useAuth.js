@@ -70,11 +70,22 @@ export const useAuth = () => {
     navigate('/login')
   }
 
+  const updateUser = (data) => {
+    axios.put('/users/user', data).then((response) => {
+      console.log(response);
+  }).catch((err) => {
+    console.error(err);
+    setError(err.response.data.msg)
+  })
+  }
+
   return {
     registerUser,
     loginUser,
     checkUser,
     logoutUser,
-    error
+    updateUser,
+    error,
+    setError
   }
 }
