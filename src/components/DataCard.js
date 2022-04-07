@@ -1,13 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react'
-import { alpha, styled } from '@mui/material/styles'
 import { Card, Typography } from '@mui/material'
 import PropTypes from "prop-types";
 import './scss/DataCard.scss'
-
-const StyledCard = styled(Card)(({theme}) => {
-  
-})
-
 
 const DataCard = (props) => {
   const { emotion, ...rest } = props
