@@ -1,4 +1,3 @@
-import '../scss/AccountPage.scss'
 import React, { useState, useContext } from 'react';
 import { UserContext } from '../../context/UserContext'
 import { useNavigate, useParams } from 'react-router-dom'
