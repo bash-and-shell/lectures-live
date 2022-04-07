@@ -113,16 +113,16 @@ const ViewSession = () => {
     <ThemeProvider theme={theme}>
       <BackButton/>
       <Grid container spacing={2} sx={{ position: 'fixed', top: 0, bottom: 0 }}>
-        <Grid item xs={3} height="100%" sx={{ backgroundColor: 'primary.main', display: 'flex', flexDirection: 'column', paddingTop: "2rem !important" }}>
+        <Grid item xs={3} height="100%" sx={{ backgroundColor: 'primary.main', display: 'flex', flexDirection: 'column', paddingTop: "4rem !important" }}>
           <Avatar sx={{ bgcolor: deepPurple[500], height: 60, width: 60, alignSelf: 'center' }}></Avatar>
-          <Typography variant='h4' textAlign="center">
-            Hi, username!
+          <Typography variant='h4' textAlign="center" color='white'>
+            Hi, {teacher}!
           </Typography>
-          <Typography variant='h4' textAlign="center">
+          <Typography variant='h4' textAlign="center" color='white'>
             Here is the data for lecture
           </Typography>
-          <Typography variant='h4' textAlign="center">
-            *lecture name*
+          <Typography variant='h4' textAlign="center" color='white'>
+            {session}
           </Typography>
         </Grid>
         <Grid container item xs={9} spacing={2} sx={{ marginTop: '0rem', paddingBottom: '1rem', paddingRight: "2rem !important" }}>
