@@ -1,12 +1,9 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useContext, useEffect } from 'react';
 import { UserContext } from '../context/UserContext';
 import { SocketContext } from '../context/SocketContext';
-// import { io } from "socket.io-client";
 
 export const useSockets = (room) => {
   const {socket} = useContext(SocketContext)
-  const navigate = useNavigate();
   const {user}  = useContext(UserContext);
 
   useEffect(()=> {

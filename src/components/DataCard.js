@@ -3,7 +3,7 @@ import { Card, Typography } from '@mui/material'
 import PropTypes from "prop-types";
 import './scss/DataCard.scss'
 
-const DataCard = (props) => {
+export const DataCard = (props) => {
   const { emotion, ...rest } = props
   const [reactions, setReactions] = useState(props.reactions)
   const divRef = useRef(null)
@@ -46,5 +46,3 @@ DataCard.propTypes = {
   reactions: PropTypes.object.isRequired,
   emotion: PropTypes.oneOf(['confused', 'understand', 'bored', 'mind blown' ]).isRequired
 }
-
-export default DataCard

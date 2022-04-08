@@ -32,7 +32,6 @@ const SignUp = () => {
   const [inputValue, setInputValue] = useState(userTypes[0])
   const [emailValid, setEmailValid] = useState(null)
   const [strongPassword, setStrongPassword] = useState(null)
-  const [errorMessage, setErrorMessage] = useState('')
   const [usernameValid, setUsernameValid] = useState(null)
   const { registerUser, error } = useAuth();
 
@@ -52,10 +51,6 @@ const SignUp = () => {
         data.get('password'),
         value.toLowerCase()
       )
-
-      if (error) {
-        setErrorMessage(error)
-      }
     }
   }
 

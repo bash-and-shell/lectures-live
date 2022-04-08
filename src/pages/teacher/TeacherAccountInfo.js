@@ -23,7 +23,6 @@ import {
 const theme = createTheme();
 
 const AccountPage = () => {
-  const { user } = useContext(UserContext)
   const navigate = useNavigate();
   const { id } = useParams()
   const [emailValid, setEmailValid] = useState(null)
@@ -121,8 +120,8 @@ const AccountPage = () => {
                     id="email"
                     label="Email"
                     name="email"
-                    error={usernameValid === false}
-                    helperText={usernameValid === false ? "This username already exists" : null}
+                    error={emailValid === false}
+                    helperText={emailValid === false ? "Please enter a valid email address" : null}
                   />
                 </Grid>
                 <Grid item xs={12}>

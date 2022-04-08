@@ -7,9 +7,8 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { deepPurple } from '@mui/material/colors';
 import ReplayIcon from '@mui/icons-material/Replay';
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
-import DataCard from '../../components/DataCard'
 import { DataGrid } from '@mui/x-data-grid'
-import { JoinDialog, EndDialog } from '../../components'
+import { JoinDialog, EndDialog, DataCard } from '../../components'
 import { useSession, useSockets } from '../../hooks'
 import {
   Avatar,

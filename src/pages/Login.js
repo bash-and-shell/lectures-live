@@ -38,6 +38,7 @@ const Login = () => {
     }
   };
 
+  //if user exists, move them to account page
   useEffect(()=> {
     checkUser()
   },[])

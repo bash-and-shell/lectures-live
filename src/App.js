@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, useParams } from 'react-router-dom'
-import TeacherRoute from './components/TeacherRoute'
-import StudentRoute from './components/StudentRoute'
+import { StudentRoute, TeacherRoute } from './components/UserRoutes'
 import { UserContext } from './context/UserContext'
 import { SocketContext, socket } from './context/SocketContext'
 import Login from './pages/Login'

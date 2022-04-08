@@ -1,5 +1,4 @@
 import React, { useState, useContext } from 'react';
-import { UserContext } from '../../context/UserContext'
 import { useNavigate, useParams } from 'react-router-dom'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { deepPurple } from '@mui/material/colors';
@@ -27,7 +26,6 @@ import {
 const theme = createTheme();
 
 const AccountPage = () => {
-  const { user } = useContext(UserContext)
   const navigate = useNavigate();
   const { id } = useParams()
   const [emailValid, setEmailValid] = useState(null)
@@ -36,14 +34,20 @@ const AccountPage = () => {
   const [strongPassword, setStrongPassword] = useState(null)
   const { updateUser, logoutUser, error, setError } = useAuth()
   const [successMessage, setSuccessMessage] = useState(null)
+
+
   const handleForm = (e) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
+
+    //check if any data exists
     if (!data.get('email') && !data.get('username') && !data.get('password')) {
       setError("No data entered")
       return
     }
     let updateData = {}
+
+    //check for valid email that isn't already registered
     if (data.get('email')) {
       setEmailValid(isEmail(data.get('email')))
       if (!emailValid)
@@ -51,10 +55,12 @@ const AccountPage = () => {
       updateData.email = data.get('email')
     }
 
+    //same for username
     if (data.get('username')) {
       updateData.username = data.get('username')
     }
 
+    //check for both passwords and do validity checks
     if (data.get('password') && data.get('confirmPassword')) {
       if (data.get('password') !== data.get('confirmPassword')) {
         setConfirmValid(false)

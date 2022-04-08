@@ -6,7 +6,6 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { deepPurple } from '@mui/material/colors';
 import { DataGrid } from '@mui/x-data-grid'
-import { SessionDialog } from '../../components'
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import AddIcon from '@mui/icons-material/Add';
 import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
@@ -31,15 +30,15 @@ const theme = createTheme({
 });
 
 const TeacherAccountPage = () => {
-  const { user, isLoading } = useContext(UserContext)
-  const { socket } = useContext(SocketContext)
+  const { user } = useContext(UserContext)
   const navigate = useNavigate();
   const { id } = useParams();
 
   const [rows, setRows] = useState([])
-  const { listSessions, getSession } = useSession()
+  const { listSessions } = useSession()
   const { logoutUser } = useAuth()
 
+  //on page render, fetch user sessions and add to the DataGrid
   useEffect(() => {
     const fetchSessions = async () => {
       const table = []
@@ -59,6 +58,7 @@ const TeacherAccountPage = () => {
     fetchSessions()
   }, [])
 
+  //Render view session button in each cell
   const renderCellButton = (params) => {
     console.log(params)
     return (

@@ -24,10 +24,7 @@ import BackButton from "../../components/BackButton";
 const theme = createTheme();
 
 const CreateSession = () => {
-  const { user } = useContext(UserContext)
-  const navigate = useNavigate();
   const [sessionName, setSessionName] = useState('')
-  const [errorMessage, setErrorMessage] = useState('')
   const { createSession, error } = useSession();
   const { teacher } = useParams()
 
@@ -39,9 +36,6 @@ const CreateSession = () => {
     }
     
     createSession(sessionName)
-    
-    if(error)
-      setErrorMessage(error)
   }
 
   return (
@@ -73,9 +67,8 @@ const CreateSession = () => {
                 autoFocus
                 value={sessionName}
                 onChange={(e)=>{setSessionName(e.target.value)}}
-                error={errorMessage !== ''}
-                helperText={errorMessage !== '' ? errorMessage : null}
-              // error={isValidUser === false}
+                error={error}
+                helperText={error ? error : null}
               />
               <Grid item xs={12}>
               <Typography variant='h5' textAlign="center"> 

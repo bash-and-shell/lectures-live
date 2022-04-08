@@ -75,7 +75,7 @@ const ViewSession = () => {
     ]
   }
 
-  //format here so that sorting by time works correctly
+  //format here instead of the hook so that sorting by time works correctly
   const timeFormatter = (cell) => {
     return ms(cell)
   }
