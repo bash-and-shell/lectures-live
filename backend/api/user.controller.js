@@ -4,7 +4,6 @@ import bcrypt from 'bcrypt';
 import mongoose from 'mongoose';
 import { getUser } from './user.helper.js'
 
-
 export const getUsers = async (req, res, next) => {
   try {
     const userList = await User.find()
@@ -153,7 +152,7 @@ export const updateUser = async (req, res, next) => {
     })
 
     let password = findUser.password
-    if(req.body.password) {
+    if (req.body.password) {
       await bcrypt.hash(req.body.password, 10)
     }
 

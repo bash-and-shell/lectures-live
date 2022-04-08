@@ -4,11 +4,9 @@ import mongoose from 'mongoose';
 dotenv.config();
 
 const port = process.env.PORT || 5001;
-let server;
-
 
 mongoose.connect(
-  process.env.LL_DB_URI, 
+  process.env.LL_DB_URI,
   {
     wtimeoutMS: 2500,
     useNewUrlParser: true
@@ -16,9 +14,8 @@ mongoose.connect(
 ).catch((err) => {
   console.error(err.stack);
   process.exit(1);
-})
-.then(async () => {
-  app.listen(port,() => {
-    console.log(`listening on port ${port}`);
-  })
-});
+}).then(async () => {
+    app.listen(port, () => {
+      console.log(`listening on port ${port}`);
+    })
+  });

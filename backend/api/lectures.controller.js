@@ -40,7 +40,7 @@ export const getLecture = async (req, res, next) => {
       return res.status(200).json({ success: true, lecture })
 
     return res.status(404).json({ success: false, lecture: false })
-  } 
+  }
   catch (err) {
     return res.status(401).json({ success: false, lecture: false, msg: err.message })
   }
@@ -112,10 +112,10 @@ export const deleteLecture = async (req, res, next) => {
 export const getResponse = async (req, res, next) => {
   try {
     const response = await Lecture.find({
-      'responses._id' : mongoose.Types.ObjectId(req.query.id)
+      'responses._id': mongoose.Types.ObjectId(req.query.id)
     }, {
       responses: {
-        '$elemMatch' : {
+        '$elemMatch': {
           "_id": mongoose.Types.ObjectId(req.query.id)
         }
       }
@@ -130,8 +130,8 @@ export const getResponse = async (req, res, next) => {
     console.log(user)
 
 
-    if(response) {
-      return res.status(200).json({ success: true, response: response[0].responses[0], user: user.username})
+    if (response) {
+      return res.status(200).json({ success: true, response: response[0].responses[0], user: user.username })
     }
 
   } catch (err) {
