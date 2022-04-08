@@ -14,13 +14,13 @@ import CreateSession from './pages/teacher/CreateSession'
 import SessionData from './pages/teacher/SessionData'
 import ViewSession from './pages/teacher/ViewSession'
 import TeacherAccountInfo from './pages/teacher/TeacherAccountInfo'
-import {useCheckUser} from './hooks'
+import { useCheckUser } from './hooks'
 
 const App = () => {
   const { user, setUser } = useCheckUser();
   return (
     <UserContext.Provider value={{ user, setUser }}>
-      <SocketContext.Provider value={{socket}}>
+      <SocketContext.Provider value={{ socket }}>
         <React.Fragment>
           <Router>
             <Routes>
